@@ -119,20 +119,22 @@
   .info-item.full { grid-column: span 2; }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
 
-  /* --- 드롭다운 (공격 페이지용) --- */
+  /* --- 드롭다운 (수정됨: Z-Index 상향) --- */
   .dropdown-list {
-    display: none; position: absolute; top: 100%; left: 0; width: 100%; z-index: 100;
+    display: none; position: absolute; top: 100%; left: 0; width: 100%; 
+    z-index: 2000; /* 관리자 패널(500)보다 훨씬 높게 설정하여 위로 올라오게 함 */
     background: #050510; border: 1px solid #333; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0,0,0,0.9);
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; }
 
-  /* --- 관리자 패널 (버그 수정됨) --- */
+  /* --- 관리자 패널 --- */
   .admin-panel {
     background: #050505; /* 불투명 블랙 */
     border: 1px solid #444; padding: 20px; border-radius: 12px; 
-    margin-top: 30px; display: none; position: relative; z-index: 500;
+    margin-top: 30px; display: none; position: relative; 
+    z-index: 500; /* 드롭다운보다 낮음 */
     box-shadow: 0 10px 50px #000;
   }
   .mini-btn { padding: 4px 8px; font-size: 0.75rem; margin-left: 2px; }
@@ -142,7 +144,8 @@
   /* --- 제보 모달 --- */
   #modalOverlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); z-index: 2000;
+    background: rgba(0,0,0,0.9); 
+    z-index: 3000; /* 최상위 */
     align-items: center; justify-content: center;
   }
   .modal-content {
@@ -165,7 +168,7 @@
   <h2 style="font-size:2.2rem; margin-bottom:30px; color:var(--text-main);">먼지 길드전</h2>
   
   <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
-    <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:20px;">먼지들의 길드전을 위하여…</p>
+    <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px; font-weight:bold;">먼지 길드전 입장</p>
     <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center;">
     <input type="password" id="codeInput" placeholder="CODE (6자리)" style="text-align:center; letter-spacing: 5px;">
     <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px; box-shadow: 0 0 15px var(--accent-glow);">입장하기</button>
@@ -200,7 +203,7 @@
     <div id="myStats" style="color:var(--text-sub); font-size:0.85rem;">내 전적 로딩중...</div>
   </div>
 
-  <div style="position:relative; margin-bottom:25px; z-index:100;">
+  <div style="position:relative; margin-bottom:25px; z-index:1000;">
     <div class="glass-card" onclick="toggleDefDropdown()" style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
       <span id="defCurrentText" style="font-weight:bold;">🛡️ 방어팀을 선택해주세요</span>
       <span style="color:var(--accent);">▼</span>
@@ -281,7 +284,7 @@
       </div>
     </div>
     <div>
-      <div style="color:#B3E5FC; margin-bottom:5px;">🔑 키/유저 관리</div>
+      <div style="color:#B3E5FC; margin-bottom:5px;">🔑 길드원 입장코드 관리</div>
       <div style="display:flex; gap:5px; margin-bottom:5px;">
         <input type="text" id="newUserNick" placeholder="닉네임">
         <button onclick="issueKey()" style="background:#2E7D32; color:#fff; width:60px;">발급</button>
@@ -312,7 +315,7 @@
       <div id="rdMaker" style="font-size:0.4em; color:#666; font-weight:normal;"></div>
     </h2>
     <div class="info-grid">
-      <div class="info-item full"><span class="info-label">영웅 구성</span><span id="rdHeroes">-</span></div>
+      <div class="info-item full"><span class="info-label">반지 추천</span><span id="rdHeroes">-</span></div>
       <div class="info-item"><span class="info-label">진형</span><span id="rdFormation">-</span></div>
       <div class="info-item"><span class="info-label">펫</span><span id="rdPet">-</span></div>
       <div class="info-item full"><span class="info-label">설명 및 팁</span><span id="rdDesc">-</span></div>
@@ -328,7 +331,7 @@
     <div>
       <div style="color:#B3E5FC; margin-bottom:5px;">📝 추천 방어팀 직접 추가</div>
       <input type="text" id="rdInputName" placeholder="방어팀 이름 (예: 메타 1번)">
-      <input type="text" id="rdInputHeroes" placeholder="영웅 구성 (예: 루디, 에반...)">
+      <input type="text" id="rdInputHeroes" placeholder="반지 추천">
       <input type="text" id="rdInputFormation" placeholder="진형">
       <input type="text" id="rdInputPet" placeholder="펫">
       <textarea id="rdInputDesc" rows="2" placeholder="설명"></textarea>
@@ -800,7 +803,7 @@ window.openModal = (type) => {
     document.getElementById("modalTitle").textContent = "방어덱 제보";
     body.innerHTML = `
       <input id="mDefName" placeholder="방어팀 이름 (필수)">
-      <input id="mHeroes" placeholder="영웅 구성 (예: 루디, 에반...)">
+      <input id="mHeroes" placeholder="반지 추천">
       <input id="mForm" placeholder="진형">
       <input id="mPet" placeholder="펫">
       <textarea id="mDesc" rows="3" placeholder="설명 및 팁"></textarea>
