@@ -26,7 +26,7 @@
     margin: 0; padding: 20px; padding-bottom: 80px;
     line-height: 1.6;
     position: relative;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
+    overflow-x: hidden;
   }
 
   #starfield {
@@ -119,42 +119,41 @@
   .info-item.full { grid-column: span 2; }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
 
-  /* --- 드롭다운 (수정: 완전 불투명 배경 및 GPU 가속 힌트) --- */
+  /* --- 드롭다운 --- */
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%; 
     z-index: 2000;
-    background: #000; /* 완전 검은색 불투명 배경 */
+    background: #000; /* 완전 불투명 */
     border: 1px solid #333; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.8); /* 그림자 범위 축소 */
-    transform: translateZ(0); /* GPU 가속 힌트 */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+    transform: translateZ(0); 
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; }
 
-  /* --- 관리자 패널 (수정: 완전 불투명 배경 및 GPU 가속 힌트) --- */
+  /* --- 관리자 패널 --- */
   .admin-panel {
-    background: #0a0a14; /* 아주 진한 남색 불투명 배경 */
+    background: #0a0a14; /* 완전 불투명 */
     border: 1px solid #444; padding: 20px; border-radius: 12px; 
     margin-top: 30px; display: none; position: relative; 
     z-index: 500;
-    box-shadow: 0 5px 30px #000; /* 그림자 범위 축소 */
-    transform: translateZ(0); /* GPU 가속 힌트 */
+    box-shadow: 0 5px 30px #000;
+    transform: translateZ(0);
   }
   .mini-btn { padding: 4px 8px; font-size: 0.75rem; margin-left: 2px; }
   .bg-blue { background: #1565C0; color: #FFF; }
   .bg-red { background: #C62828; color: #FFF; }
 
-  /* --- 제보 모달 (수정: 완전 불투명 배경) --- */
+  /* --- 제보 모달 --- */
   #modalOverlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); /* 반투명 검정 배경 */
+    background: rgba(0,0,0,0.8);
     z-index: 3000;
     align-items: center; justify-content: center;
-    transform: translateZ(0); /* GPU 가속 힌트 */
+    transform: translateZ(0);
   }
   .modal-content {
-    background: #101015; /* 완전 불투명 배경 */
-    border: 1px solid var(--accent); 
+    background: #101015; border: 1px solid var(--accent); 
     border-radius: var(--radius); padding: 25px; width: 90%; max-width: 400px;
     box-shadow: 0 10px 40px #000;
   }
@@ -237,7 +236,7 @@
     </h2>
     <div class="info-grid">
       <div class="info-item"><span class="info-label">전적</span><span id="cardWin">0</span>승 <span id="cardLose">0</span>패</div>
-      <div class="info-item"><span class="info-label">타입</span><span id="cardType">-</span></div>
+      <div class="info-item"><span class="info-label">속공</span><span id="cardType">-</span></div>
       <div class="info-item"><span class="info-label">반지</span><span id="cardRing">-</span></div>
       <div class="info-item"><span class="info-label">펫</span><span id="cardPet">-</span></div>
       <div class="info-item full"><span class="info-label">스킬순서</span><span id="cardSkill">-</span></div>
@@ -275,7 +274,7 @@
       <div style="color:#B3E5FC; margin-bottom:5px;">⚔️ 공격팀 직접 관리</div>
       <input type="text" id="atkName" placeholder="공격팀 이름">
       <select id="atkType">
-        <option value="" disabled selected>타입</option>
+        <option value="" disabled selected>속공 선택</option>
         <option value="속공 따야 함">⚡ 속공 따야 함</option>
         <option value="내줘도 됨">🛡️ 내줘도 됨</option>
       </select>
@@ -385,18 +384,26 @@ const db = getDatabase(app);
 const ADMIN_PW = "0918";
 
 let myNick = "";
-let currentDefense = ""; // 적 방어팀 Key
-let currentAttack = "";  // 내 공격팀 Key
-let currentRecDef = "";  // 선택된 추천 방어팀 Key
+let currentDefense = ""; 
+let currentAttack = ""; 
+let currentRecDef = ""; 
 let adminOpen = false;
+// [변경] 관리자 인증 상태 플래그 추가 (한번 로그인하면 유지)
+let isAdminAuthenticated = false; 
+
 let allLogsCache = []; 
 let defenseDataCache = {}; 
 
 window.onload = () => {
   const storedNick = localStorage.getItem("nickname");
   const storedKey = localStorage.getItem("accessKey");
-  if (storedNick && storedKey) checkLogin(storedNick, storedKey, true);
-  else showLogin();
+  if (storedNick && storedKey) {
+    // 이미 관리자로 로그인된 기록이 있으면 자동 인증
+    if(storedNick === "관리자" && storedKey === "ADMIN") isAdminAuthenticated = true;
+    checkLogin(storedNick, storedKey, true);
+  } else {
+    showLogin();
+  }
 };
 
 /* --- 화면 전환 로직 --- */
@@ -426,7 +433,7 @@ window.goAttackMode = () => {
 window.goDefenseMode = () => {
   document.getElementById("dashboardScreen").style.display = "none";
   document.getElementById("defenseScreen").style.display = "block";
-  loadRecDefenseList(); // 추천 방어팀 로드
+  loadRecDefenseList(); 
 };
 
 /* --- 로그인 로직 --- */
@@ -451,22 +458,32 @@ async function checkLogin(nick, key, isAuto) {
   }
 }
 
+// [변경] 관리자 로그인 함수 (최초 1회 인증)
 window.adminLogin = () => {
   if(prompt("비밀번호") === ADMIN_PW) {
     localStorage.setItem("nickname", "관리자");
     localStorage.setItem("accessKey", "ADMIN");
     myNick = "관리자";
+    isAdminAuthenticated = true; // 인증 성공 상태 저장
     showDashboard();
   } else { alert("오류"); }
 };
 
-function checkPW() { return prompt("관리자 비밀번호") === ADMIN_PW; }
+// [변경] 비밀번호 확인 함수 (인증 상태면 패스)
+function checkPW() { 
+  if(isAdminAuthenticated) return true; // 이미 인증됨
+  if(prompt("관리자 비밀번호") === ADMIN_PW) {
+    isAdminAuthenticated = true; // 이번 세션 동안 인증 유지
+    return true;
+  }
+  return false;
+}
 
 /* --- [공격 모드] 관련 스크립트 --- */
 window.toggleAttackAdmin = () => {
   const panel = document.getElementById("attackAdminPanel");
   if(panel.style.display === "none") {
-    if(!checkPW()) return;
+    if(!checkPW()) return; // checkPW가 true면 바로 열림
     panel.style.display = "block";
     renderUserKeys();
     renderAtkSuggestions();
@@ -474,10 +491,9 @@ window.toggleAttackAdmin = () => {
   } else {
     panel.style.display = "none";
   }
-  renderRanking(); // 랭킹 갱신
+  renderRanking(); 
 };
 
-// 방어팀 드롭다운
 window.toggleDefDropdown = () => {
   const list = document.getElementById("defListDropdown");
   list.style.display = (list.style.display === "block") ? "none" : "block";
@@ -492,7 +508,6 @@ window.addEventListener('click', (e) => {
   }
 });
 
-// 방어팀 리스트 로드
 onValue(ref(db,"defenseTeams"), snap => {
   const realList = document.getElementById("defRealList");
   realList.innerHTML = "";
@@ -591,7 +606,6 @@ async function loadRecentRecord(dk, ak){
   div.innerHTML = html || "-";
 }
 
-// 승패 기록
 async function writeLog(res){
   if(!currentDefense || !currentAttack) return;
   const snap = await get(ref(db, `defenseTeams/${currentDefense}/attackTeams/${currentAttack}`));
@@ -617,7 +631,6 @@ window.resetRecord = () => {
   if(checkPW()) update(ref(db,`defenseTeams/${currentDefense}/attackTeams/${currentAttack}`),{win:0,lose:0});
 };
 
-// 공격 관리자 기능
 window.addDefense = ()=>{ if(checkPW()) push(ref(db,"defenseTeams"),{name:document.getElementById("newDefName").value,attackTeams:{}}); };
 window.delDefense = ()=>{ if(checkPW()) remove(ref(db,"defenseTeams/"+currentDefense)); };
 window.addAttack = ()=>{
@@ -639,7 +652,6 @@ window.editAttack = ()=>{
 };
 window.delAttack = ()=>{ if(checkPW()) remove(ref(db,`defenseTeams/${currentDefense}/attackTeams/${currentAttack}`)); };
 
-// 제보 (공격)
 function renderAtkSuggestions() {
   const div = document.getElementById("atkSuggestionList");
   onValue(ref(db, "suggestions/attack"), snap => {
@@ -674,7 +686,7 @@ window.approveAtk = async (dk, sk) => {
 window.rejectAtk = (dk,sk) => { if(confirm("거절?")) remove(ref(db, `suggestions/attack/${dk}/${sk}`)); };
 
 
-/* --- [방어 모드] 관련 스크립트 (신규) --- */
+/* --- [방어 모드] 관련 스크립트 --- */
 window.toggleDefenseAdmin = () => {
   const panel = document.getElementById("defenseAdminPanel");
   if(panel.style.display === "none") {
@@ -718,7 +730,6 @@ function showRecDefDetail(key, val) {
   document.getElementById("rdPet").textContent = val.pet || "-";
   document.getElementById("rdDesc").innerHTML = (val.desc || "-").replace(/\n/g,"<br>");
 
-  // 관리자 인풋 채우기
   document.getElementById("rdInputName").value = val.name;
   document.getElementById("rdInputHeroes").value = val.heroes;
   document.getElementById("rdInputFormation").value = val.formation;
@@ -726,7 +737,6 @@ function showRecDefDetail(key, val) {
   document.getElementById("rdInputDesc").value = val.desc;
 }
 
-// 방어팀 관리자 기능
 window.addRecDefense = () => {
   if(!checkPW()) return;
   push(ref(db, "recommendedDefenses"), {
@@ -754,7 +764,6 @@ window.delRecDefense = () => {
   if(confirm("삭제합니까?")) remove(ref(db, `recommendedDefenses/${currentRecDef}`));
 };
 
-// 방어팀 제보 관리
 function renderDefSuggestions() {
   const div = document.getElementById("defSuggestionList");
   onValue(ref(db, "suggestions/defense"), snap => {
@@ -786,7 +795,7 @@ window.approveDef = async (key) => {
 window.rejectDef = (key) => { if(confirm("거절?")) remove(ref(db, `suggestions/defense/${key}`)); };
 
 
-/* --- 모달 공통 (제보) --- */
+/* --- 모달 공통 --- */
 let modalType = ""; 
 window.openModal = (type) => {
   modalType = type;
@@ -796,9 +805,10 @@ window.openModal = (type) => {
   if(type === 'attack') {
     if(!currentDefense) { alert("방어팀을 먼저 선택하세요."); closeModal(); return; }
     document.getElementById("modalTitle").textContent = "공격덱 제보";
+    // [변경] 타입 -> 속공 (라벨 변경)
     body.innerHTML = `
       <input id="mName" placeholder="공격팀 이름 (필수)">
-      <select id="mType"><option value="속공 따야 함">⚡ 속공</option><option value="내줘도 됨">🛡️ 후공</option></select>
+      <select id="mType"><option value="속공 따야 함">⚡ 속공 따야 함</option><option value="내줘도 됨">🛡️ 내줘도 됨</option></select>
       <input id="mRing" placeholder="반지">
       <input id="mPet" placeholder="펫">
       <textarea id="mArmor" rows="2" placeholder="장비/특이사항"></textarea>
@@ -843,7 +853,6 @@ function submitDefenseSug() {
   alert("제보 완료"); closeModal();
 }
 
-/* --- 공통 관리자 기능 (키/유저/랭킹) --- */
 function renderRanking() {
   const list = document.getElementById("rankingList");
   onValue(ref(db,"logs"), snap => {
@@ -875,7 +884,7 @@ function renderRanking() {
 
     let hide = 0;
     rankData.forEach((d, i) => {
-      if(!document.getElementById("attackAdminPanel").style.display.includes("block") && i>=10) { hide++; return; } // 관리자창 열려있으면 다보임
+      if(!document.getElementById("attackAdminPanel").style.display.includes("block") && i>=10) { hide++; return; } 
       
       const tot = d.w+d.l;
       const r = tot ? Math.round(d.w/tot*100) : 0;
@@ -927,13 +936,11 @@ function renderUserKeys() {
 window.deleteUser = async (n) => {
   if(!confirm("삭제?")) return;
   await remove(ref(db, `allowedUsers/${n}`));
-  // 로그 삭제 로직은 생략 (요청시 추가 가능)
 };
 
 function renderAdminUserList() {
   const div = document.getElementById("adminUserList");
-  // allLogsCache를 기반으로 유저 리스트 및 승패 조작 버튼 렌더링 (이전 코드와 동일 로직)
-  // ... (지면상 생략, 필요시 이전 코드의 renderAdminUserList 함수 그대로 사용)
+  // (유저 승패 수정 로직은 이전과 동일하므로 생략)
 }
 </script>
 </body>
