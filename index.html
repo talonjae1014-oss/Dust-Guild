@@ -167,15 +167,20 @@
     color: var(--text-main);
   }
 
-  /* 관리자 패널 */
+  /* --- [수정된 관리자 패널] --- */
+  /* 배경을 순수 블랙 + 투명도 + 강한 블러로 변경하여 '쨍한 회색' 느낌 제거 */
   #adminPanel {
-    background: rgba(10, 10, 20, 0.9); border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur);
+    background: rgba(0, 0, 0, 0.6); /* 기존 rgba(10,10,20,0.9)보다 어둡고 투명하게 */
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(12px); /* 블러 강도 증가 */
     padding: 20px; border-radius: 12px; margin-top: 30px; display: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
   }
   .mini-btn { padding: 6px 10px; font-size: 0.8rem; margin-left: 2px; border-radius: 6px; }
-  .bg-blue { background: #1976D2; color: #FFF; }
-  .bg-red { background: #D32F2F; color: #FFF; }
+  
+  /* 관리자 버튼도 약간 투명하게 하여 배경에 녹아들도록 수정 */
+  .bg-blue { background: rgba(25, 118, 210, 0.8); color: #FFF; border: 1px solid rgba(25, 118, 210, 0.4); }
+  .bg-red { background: rgba(211, 47, 47, 0.8); color: #FFF; border: 1px solid rgba(211, 47, 47, 0.4); }
 
   /* 키 관리 리스트 */
   .key-row {
