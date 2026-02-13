@@ -26,7 +26,7 @@
     margin: 0; padding: 20px; padding-bottom: 80px;
     line-height: 1.6;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
   }
 
   #starfield {
@@ -119,38 +119,44 @@
   .info-item.full { grid-column: span 2; }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
 
-  /* --- 드롭다운 (수정됨: Z-Index 상향) --- */
+  /* --- 드롭다운 (수정: 완전 불투명 배경 및 GPU 가속 힌트) --- */
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-    z-index: 2000; /* 관리자 패널(500)보다 훨씬 높게 설정하여 위로 올라오게 함 */
-    background: #050510; border: 1px solid #333; border-radius: var(--radius);
+    z-index: 2000;
+    background: #000; /* 완전 검은색 불투명 배경 */
+    border: 1px solid #333; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.8); /* 그림자 범위 축소 */
+    transform: translateZ(0); /* GPU 가속 힌트 */
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; }
 
-  /* --- 관리자 패널 --- */
+  /* --- 관리자 패널 (수정: 완전 불투명 배경 및 GPU 가속 힌트) --- */
   .admin-panel {
-    background: #050505; /* 불투명 블랙 */
+    background: #0a0a14; /* 아주 진한 남색 불투명 배경 */
     border: 1px solid #444; padding: 20px; border-radius: 12px; 
     margin-top: 30px; display: none; position: relative; 
-    z-index: 500; /* 드롭다운보다 낮음 */
-    box-shadow: 0 10px 50px #000;
+    z-index: 500;
+    box-shadow: 0 5px 30px #000; /* 그림자 범위 축소 */
+    transform: translateZ(0); /* GPU 가속 힌트 */
   }
   .mini-btn { padding: 4px 8px; font-size: 0.75rem; margin-left: 2px; }
   .bg-blue { background: #1565C0; color: #FFF; }
   .bg-red { background: #C62828; color: #FFF; }
 
-  /* --- 제보 모달 --- */
+  /* --- 제보 모달 (수정: 완전 불투명 배경) --- */
   #modalOverlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); 
-    z-index: 3000; /* 최상위 */
+    background: rgba(0,0,0,0.8); /* 반투명 검정 배경 */
+    z-index: 3000;
     align-items: center; justify-content: center;
+    transform: translateZ(0); /* GPU 가속 힌트 */
   }
   .modal-content {
-    background: #101015; border: 1px solid var(--accent); 
+    background: #101015; /* 완전 불투명 배경 */
+    border: 1px solid var(--accent); 
     border-radius: var(--radius); padding: 25px; width: 90%; max-width: 400px;
+    box-shadow: 0 10px 40px #000;
   }
 
   footer {
@@ -330,7 +336,7 @@
     </div>
     <div>
       <div style="color:#B3E5FC; margin-bottom:5px;">📝 추천 방어팀 직접 추가</div>
-      <input type="text" id="rdInputName" placeholder="방어팀 이름 (예: 메타 1번)">
+      <input type="text" id="rdInputName" placeholder="방어팀 이름 (예: 오공 프레이야 에이스)">
       <input type="text" id="rdInputHeroes" placeholder="반지 추천">
       <input type="text" id="rdInputFormation" placeholder="진형">
       <input type="text" id="rdInputPet" placeholder="펫">
