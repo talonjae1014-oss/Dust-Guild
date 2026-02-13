@@ -8,7 +8,7 @@
   /* --- [스타일] Deep Night & Starlight Contrast --- */
   :root {
     /* 배경: 완전한 어둠 ~ 깊은 네이비 */
-    --bg-gradient: linear-gradient(to bottom, #02010a, #040416, #0b0b2e);
+    --bg-gradient: linear-gradient(to bottom, #050510, #0a0a20, #151530);
     
     /* 텍스트 */
     --text-main: #FFFFFF;
@@ -16,13 +16,12 @@
     
     /* 포인트: 아이스 블루 */
     --accent: #B3E5FC; 
-    --accent-glow: rgba(179, 229, 252, 0.6);
+    --accent-glow: rgba(179, 229, 252, 0.4);
     
-    /* 카드 디자인 */
-    --card-bg: rgba(20, 30, 50, 0.6); 
-    --card-border: rgba(255, 255, 255, 0.12);
-    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-    --backdrop-blur: blur(8px);
+    /* 카드 디자인: 기본 유리 효과 */
+    --card-bg: rgba(20, 30, 50, 0.5); 
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     --radius: 16px;
   }
 
@@ -42,18 +41,17 @@
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: -1;
     background-image: 
-      radial-gradient(1.5px 1.5px at 10% 10%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(1.5px 1.5px at 20% 30%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(2px 2px at 40% 70%, #E3F2FD, rgba(0,0,0,0)),
-      radial-gradient(1.5px 1.5px at 60% 40%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(2.5px 2.5px at 80% 80%, #B3E5FC, rgba(0,0,0,0)),
-      radial-gradient(1.5px 1.5px at 90% 20%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(1px 1px at 50% 50%, #FFF, rgba(0,0,0,0));
-    background-size: 300px 300px;
-    opacity: 0.8; 
+      radial-gradient(2px 2px at 10% 10%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 20% 30%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(3px 3px at 40% 70%, #E3F2FD, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 60% 40%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(3px 3px at 80% 80%, #B3E5FC, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 90% 20%, #FFF, rgba(0,0,0,0));
+    background-size: 400px 400px;
+    opacity: 0.7; 
   }
 
-  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
   h2 { font-size: 1.8rem; }
   
   button {
@@ -63,28 +61,28 @@
   }
   button:hover { transform: translateY(-2px); box-shadow: 0 0 15px var(--accent-glow); }
   
-  /* 공통 유리 카드 */
+  /* 공통 유리 카드 (메인 화면용) */
   .glass-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur); -webkit-backdrop-filter: var(--backdrop-blur);
+    /* backdrop-filter: blur(5px); -> 렉 유발 가능성 낮춤 */
     box-shadow: var(--card-shadow);
     border-radius: var(--radius);
   }
 
+  /* 입력창 디자인 - 배경을 진하게 해서 글씨 잘 보이게 */
   input, select, textarea {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--card-border); color: #FFF;
+    background: #1a1a2e; /* 투명도 제거, 진한 남색 배경 */
+    border: 1px solid #333; color: #FFF;
     padding: 14px; border-radius: 10px; width: 100%;
     box-sizing: border-box; margin-bottom: 8px;
     font-size: 0.95rem; outline: none; transition: 0.3s;
   }
   input:focus, select:focus, textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
-    background: rgba(0, 0, 0, 0.6);
+    background: #000;
   }
-  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
+  input::placeholder, textarea::placeholder { color: #888; }
   
   select {
     appearance: none;
@@ -99,7 +97,6 @@
   .dropdown-wrapper { position: relative; margin-bottom: 25px; z-index: 100; }
   .glass-box {
     background: var(--card-bg); border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur);
     box-shadow: var(--card-shadow); border-radius: var(--radius);
     padding: 20px; display: flex; justify-content: space-between; align-items: center;
     cursor: pointer; transition: 0.3s;
@@ -108,17 +105,17 @@
   
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%;
-    background: #02010a; 
-    border: 1px solid var(--card-border); border-radius: var(--radius);
+    background: #050510; /* 완전 불투명 배경 */
+    border: 1px solid #333; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
   }
-  .dropdown-item { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; color: var(--text-main); }
-  .dropdown-item:hover { background: rgba(179, 229, 252, 0.1); color: var(--accent); }
+  .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; color: var(--text-main); }
+  .dropdown-item:hover { background: #151530; color: var(--accent); }
   
   .dropdown-add-btn {
     text-align: center; color: var(--accent); font-weight: bold; 
-    border-top: 1px dashed rgba(255,255,255,0.2); background: rgba(255,255,255,0.03);
+    border-top: 1px dashed #333; background: #0a0a20;
   }
 
   /* 공격팀 리스트 */
@@ -127,7 +124,7 @@
     gap: 12px; margin-bottom: 20px;
   }
   .attack-btn {
-    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+    background: rgba(30, 30, 50, 0.6); border: 1px solid var(--card-border);
     color: var(--text-sub); padding: 15px 5px; border-radius: 12px;
     min-height: 85px; text-align: center;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -141,24 +138,22 @@
 
   /* 상세 정보 카드 */
   #attackCard {
-    background: rgba(10, 15, 30, 0.7); border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur);
+    background: #0f121a; /* 불투명 배경으로 변경 */
+    border: 1px solid #333;
     box-shadow: var(--card-shadow); border-radius: var(--radius);
     padding: 25px; display: none; margin-bottom: 30px;
   }
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .info-item { 
-    background: rgba(0, 0, 0, 0.4); 
+    background: #1a1a2e; 
     padding: 12px; border-radius: 8px; font-size: 0.95rem; 
-    border: 1px solid rgba(255, 255, 255, 0.05); color: #EEE;
+    border: 1px solid #333; color: #EEE;
   }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
   
   /* 승패 버튼 */
-  .btn-win { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: #FFF; width: 48%; padding: 15px; border: 1px solid #43a047; }
-  .btn-lose { background: linear-gradient(135deg, #b71c1c, #c62828); color: #FFF; width: 48%; padding: 15px; border: 1px solid #e53935; }
-  .btn-win:hover { box-shadow: 0 0 20px rgba(76, 175, 80, 0.4); }
-  .btn-lose:hover { box-shadow: 0 0 20px rgba(244, 67, 54, 0.4); }
+  .btn-win { background: #1b5e20; color: #FFF; width: 48%; padding: 15px; border: 1px solid #43a047; }
+  .btn-lose { background: #b71c1c; color: #FFF; width: 48%; padding: 15px; border: 1px solid #e53935; }
 
   /* 랭킹 리스트 */
   .rank-row {
@@ -167,41 +162,44 @@
     color: var(--text-main);
   }
 
-  /* --- [관리자 패널 수정: 버그 방지] --- */
+  /* --- [관리자 패널 수정: 화면 깨짐 방지] --- */
   #adminPanel {
-    /* 배경: 블러 제거하고 진한 블랙 반투명으로 변경 (렌더링 안정성 확보) */
-    background: rgba(0, 0, 0, 0.9); 
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    /* backdrop-filter: blur(12px); <-- 이 부분이 버그의 원인이므로 제거 */
+    /* 1. backdrop-filter(블러) 제거 -> 버그 원인 차단 */
+    /* 2. 배경을 아주 진한 불투명 색상으로 설정 (#050505) */
+    background: #050505; 
+    border: 1px solid #444;
     padding: 20px; border-radius: 12px; margin-top: 30px; display: none;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.95);
+    box-shadow: 0 10px 50px rgba(0,0,0,1); /* 그림자 진하게 */
     position: relative; z-index: 500;
   }
+  /* 관리자 패널 내부 요소들 스타일 */
+  #adminPanel h3, #adminPanel h4 { color: #fff; text-shadow: none; }
+  
   .mini-btn { padding: 6px 10px; font-size: 0.8rem; margin-left: 2px; border-radius: 6px; }
   
-  .bg-blue { background: rgba(21, 101, 192, 0.9); color: #FFF; border: 1px solid rgba(255,255,255,0.1); }
-  .bg-red { background: rgba(198, 40, 40, 0.9); color: #FFF; border: 1px solid rgba(255,255,255,0.1); }
+  .bg-blue { background: #1565C0; color: #FFF; border: none; }
+  .bg-red { background: #C62828; color: #FFF; border: none; }
 
   /* 키 관리 리스트 */
   .key-row {
     display: flex; justify-content: space-between; align-items: center;
-    background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem;
-    border: 1px solid rgba(255,255,255,0.05);
+    background: #1a1a1a; padding: 10px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem;
+    border: 1px solid #333;
   }
 
   /* 제보 모달 */
   #suggestModal {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 2000;
-    align-items: center; justify-content: center; backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.9); z-index: 2000;
+    align-items: center; justify-content: center;
   }
   .modal-content {
-    background: #0b0b2e; 
+    background: #101015; /* 모달도 불투명하게 */
     border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(179, 229, 252, 0.1); border-radius: var(--radius);
     padding: 25px; width: 90%; max-width: 400px; color: var(--text-main);
   }
   .suggest-item {
-    background: rgba(255,255,255,0.05); padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+    background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #333;
   }
 
   footer {
@@ -215,14 +213,14 @@
 <div id="starfield"></div>
 
 <div id="loginScreen" style="text-align:center; margin-top:100px;">
-  <div style="font-size:3.5rem; margin-bottom:10px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));">☁️</div>
-  <h2 style="font-size:2.2rem; margin-bottom:30px; color:var(--text-main); text-shadow: 0 0 20px rgba(179, 229, 252, 0.5);">먼지 길드전</h2>
+  <div style="font-size:3.5rem; margin-bottom:10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));">☁️</div>
+  <h2 style="font-size:2.2rem; margin-bottom:30px; color:var(--text-main);">먼지 길드전</h2>
   
-  <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px; border: 1px solid rgba(255,255,255,0.15);">
-    <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:20px;">먼지들의 길드전을 위하여…</p>
-    <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center; background:rgba(0,0,0,0.5);">
-    <input type="password" id="codeInput" placeholder="CODE (6자리)" style="text-align:center; letter-spacing: 5px; background:rgba(0,0,0,0.5);">
-    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px; box-shadow: 0 0 20px var(--accent-glow);">입장하기</button>
+  <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
+    <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:20px;">먼지 길드전 입장</p>
+    <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center;">
+    <input type="password" id="codeInput" placeholder="CODE (6자리)" style="text-align:center; letter-spacing: 5px;">
+    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px; box-shadow: 0 0 15px var(--accent-glow);">입장하기</button>
   </div>
   
   <div style="margin-top:40px;">
@@ -234,7 +232,7 @@
   
   <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
     <div>
-      <div id="currentNick" style="color:var(--text-main); font-weight:bold; font-size:1.2rem; margin-bottom:4px; text-shadow: 0 0 10px rgba(255,255,255,0.3);"></div>
+      <div id="currentNick" style="color:var(--text-main); font-weight:bold; font-size:1.2rem; margin-bottom:4px;"></div>
       <div id="myStats" style="color:var(--text-sub); font-size:0.85rem;">내 전적 로딩중...</div>
     </div>
     <button onclick="toggleAdmin()" id="adminBtn" style="background:rgba(255,255,255,0.08); color:var(--text-main); font-size:0.8rem; padding:6px 12px; border:1px solid var(--card-border);">+ 관리자</button>
@@ -248,7 +246,7 @@
     </div>
     
     <div id="defListDropdown" class="dropdown-list">
-      <div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.1); background:#02010a; position:sticky; top:0; z-index:10;">
+      <div style="padding:10px; border-bottom:1px solid #333; background:#000; position:sticky; top:0; z-index:10;">
         <input type="text" id="defSearchInput" placeholder="🔍 방어팀 검색..." style="margin:0;" oninput="filterDefense()" onclick="event.stopPropagation()">
       </div>
       <div id="defRealList"></div>
@@ -266,7 +264,7 @@
 
   <div id="attackCard">
     <h2 style="border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; margin-bottom:10px;">
-      <span id="cardFire"></span> <span id="cardName" style="color:var(--text-main); text-shadow: 0 0 8px rgba(255,255,255,0.5);"></span>
+      <span id="cardFire"></span> <span id="cardName" style="color:var(--text-main);"></span>
       <span style="float:right; font-size:0.6em; color:var(--text-sub); font-weight:normal;">
         승률 <span id="cardRate" style="color:var(--accent); font-size:1.4em; font-weight:bold; text-shadow: 0 0 10px var(--accent-glow);">0</span>%
       </span>
@@ -295,23 +293,23 @@
 
   <div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
     <h3 style="color:var(--text-main); font-size:1rem;">☁️ 명예의 전당 (승리 랭킹)</h3>
-    <div id="rankingList" class="glass-card" style="padding: 0; overflow: hidden; background:rgba(0,0,0,0.2);"></div>
+    <div id="rankingList" class="glass-card" style="padding: 0; overflow: hidden; background:rgba(0,0,0,0.3);"></div>
     <div id="moreRankMsg" style="text-align:center; color:rgba(255,255,255,0.3); font-size:0.8rem; margin-top:10px; display:none;">* 11위 이하는 관리자에게만 표시됩니다.</div>
   </div>
 
   <div id="adminPanel">
     <h3>🛠️ 관리자 패널</h3>
     
-    <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+    <div style="background:#111; padding:15px; border-radius:8px; border:1px solid #333; margin-bottom:20px;">
       <h4 style="color:var(--accent);">🔑 길드원 접속 키 관리</h4>
       <div style="display:flex; gap:5px; margin-bottom:10px;">
         <input type="text" id="newUserNick" placeholder="길드원 닉네임" style="margin:0;">
         <button onclick="issueKey()" style="background:#2E7D32; color:#fff; width:80px;">발급</button>
       </div>
-      <div id="userKeyList" style="max-height:200px; overflow-y:auto; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;"></div>
+      <div id="userKeyList" style="max-height:200px; overflow-y:auto; border-top:1px solid #333; padding-top:10px;"></div>
     </div>
 
-    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+    <div style="background:#111; padding:10px; border-radius:8px; border:1px solid #333; margin-bottom:20px;">
       <h4 style="color:#EF5350;">🔔 대기 중인 제보</h4>
       <div id="suggestionList" style="color:var(--text-sub); font-size:0.9rem;">(제보된 덱이 없습니다)</div>
     </div>
@@ -345,9 +343,9 @@
         <button onclick="delAttack()" style="background:#C62828; color:#fff;">삭제</button>
       </div>
     </div>
-    <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
+    <hr style="border-color:#333; margin:20px 0;">
     <h4>👥 유저 승패 수정</h4>
-    <div id="adminUserList" style="max-height:300px; overflow-y:auto; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);"></div>
+    <div id="adminUserList" style="max-height:300px; overflow-y:auto; background:#111; padding:10px; border-radius:8px; border:1px solid #333;"></div>
   </div>
 
   <footer>
@@ -376,7 +374,7 @@
     <input type="text" id="sugSkill" placeholder="스킬 순서">
     <div style="display:flex; gap:10px; margin-top:10px;">
       <button onclick="submitSuggestion()" style="flex:1; background:var(--accent); color:#02010a; font-weight:bold;">제보하기</button>
-      <button onclick="closeSuggestModal()" style="flex:1; background:rgba(255,255,255,0.1); color:var(--text-main);">취소</button>
+      <button onclick="closeSuggestModal()" style="flex:1; background:#333; color:var(--text-main);">취소</button>
     </div>
   </div>
 </div>
