@@ -3,92 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>☁️ 먼지 길드전 (Deep Night)</title>
+<title>☁️ 먼지 길드전 (Deep Navy)</title>
 <style>
-  /* --- [스타일] Optimized Dark Theme (No Blur/Glass for Stability) --- */
+  /* --- [스타일] Deep Navy Night Theme (Stable) --- */
   :root {
-    --bg-color: #050510; /* 단색 배경 (안정성 최우선) */
+    /* 배경: 칠흑 같은 어둠이 아닌, 깊은 네이비 톤 */
+    --bg-color: #0b0d17; 
+    --bg-gradient: linear-gradient(to bottom, #0b0d17 0%, #101426 50%, #181b36 100%);
+    
     --text-main: #FFFFFF;
     --text-sub: #D1D1D1;
     --accent: #B3E5FC; 
-    --card-bg: #151520; /* 불투명 배경 */
-    --card-border: #333;
-    --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* 그림자 단순화 */
+    --accent-glow: rgba(179, 229, 252, 0.4);
+    
+    /* 카드: 약간의 남색 기운이 도는 반투명 블랙 */
+    --card-bg: rgba(20, 25, 40, 0.6); 
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     --radius: 16px;
   }
 
-  html, body {
+  html {
+    background-color: var(--bg-color); /* 모바일 흰 화면 방지용 안전장치 */
     height: 100%;
-    margin: 0; padding: 0;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    font-family: 'Suit', sans-serif;
-    overflow-x: hidden;
   }
 
   body {
-    padding: 20px; 
-    padding-bottom: 80px;
-    box-sizing: border-box;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    margin: 0; padding: 20px; padding-bottom: 80px;
+    color: var(--text-main);
+    font-family: 'Suit', sans-serif;
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* 별 배경: CSS 연산 최소화 */
+  /* 별 배경: 안전한 CSS 패턴 사용 */
   #starfield {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: -1;
-    background: 
-      radial-gradient(1px 1px at 25% 10%, #FFF, transparent),
-      radial-gradient(1px 1px at 75% 20%, #FFF, transparent),
-      radial-gradient(2px 2px at 50% 50%, #555, transparent),
-      radial-gradient(1px 1px at 10% 80%, #FFF, transparent),
-      radial-gradient(1px 1px at 90% 90%, #FFF, transparent);
-    background-size: 500px 500px;
-    opacity: 0.5;
+    /* 작은 별들이 떠있는 느낌 */
+    background-image: 
+      radial-gradient(1.5px 1.5px at 15% 15%, #FFF, transparent),
+      radial-gradient(1px 1px at 50% 20%, #FFF, transparent),
+      radial-gradient(2px 2px at 80% 10%, #E0F7FA, transparent),
+      radial-gradient(1.5px 1.5px at 10% 60%, #FFF, transparent),
+      radial-gradient(1px 1px at 90% 80%, #FFF, transparent),
+      radial-gradient(2px 2px at 40% 90%, #B3E5FC, transparent);
+    background-size: 550px 550px;
+    opacity: 0.6; 
   }
 
-  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; }
+  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(0,0,0,0.3); }
   
   button {
     cursor: pointer; border: none; padding: 12px 18px; border-radius: 10px;
     font-weight: bold; transition: 0.2s; font-size: 0.9rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   }
   button:active { transform: scale(0.98); }
 
-  /* --- 공통 UI 요소 (불투명) --- */
-  .flat-card {
+  /* --- 공통 UI 요소 --- */
+  .glass-card {
     background: var(--card-bg); 
     border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow); 
     border-radius: var(--radius);
-    box-shadow: var(--card-shadow);
   }
 
   input, select, textarea {
-    background: #0a0a10; /* 아주 어두운 배경 */
+    background: #151828; /* 아주 어두운 네이비 */
     border: 1px solid #444; color: #FFF;
     padding: 14px; border-radius: 10px; width: 100%;
     box-sizing: border-box; margin-bottom: 8px;
     font-size: 0.95rem; outline: none;
-    -webkit-appearance: none; /* iOS 스타일 제거 */
   }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #0b0d17; }
   
   /* --- 대시보드 --- */
   #dashboardScreen { display: none; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto; margin-top: 50px; }
   
   .dash-btn-big {
-    background: #1565C0; color: #FFF; font-size: 1.5rem; height: 150px;
+    background: linear-gradient(135deg, #1565C0, #0D47A1);
+    color: #FFF; font-size: 1.5rem; height: 150px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    border: 1px solid #444;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 10px 30px rgba(13, 71, 161, 0.4);
   }
   .dash-btn-small {
-    background: #37474F; color: #EEE; font-size: 1.1rem; height: 80px;
-    border: 1px solid #444;
+    background: linear-gradient(135deg, #37474F, #263238);
+    color: #EEE; font-size: 1.1rem; height: 80px;
+    border: 1px solid rgba(255,255,255,0.1);
   }
   
   /* --- 네비게이션 --- */
   .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .back-btn { background: #333; color: #AAA; padding: 8px 12px; font-size: 0.8rem; }
+  .back-btn { background: rgba(255,255,255,0.1); color: #AAA; padding: 8px 12px; font-size: 0.8rem; }
 
   /* --- 리스트 그리드 --- */
   .grid-list {
@@ -96,25 +107,26 @@
     gap: 12px; margin-bottom: 20px;
   }
   .item-btn {
-    background: #1e1e2d; border: 1px solid #333;
+    background: rgba(30, 35, 50, 0.6); border: 1px solid var(--card-border);
     color: var(--text-sub); padding: 15px 5px; border-radius: 12px;
     min-height: 85px; text-align: center;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     transition: 0.2s;
   }
   .item-btn.active {
-    background: #1a2a40; border: 1px solid var(--accent);
-    color: #FFF; font-weight: bold;
+    background: rgba(179, 229, 252, 0.15); border: 1px solid var(--accent);
+    color: #FFF; font-weight: bold; box-shadow: 0 0 15px var(--accent-glow);
   }
 
   /* --- 상세 정보 카드 --- */
   .detail-card {
-    background: #151520; border: 1px solid #333;
-    border-radius: var(--radius); padding: 25px; display: none; margin-bottom: 30px;
+    background: #121420; border: 1px solid #333;
+    box-shadow: var(--card-shadow); border-radius: var(--radius);
+    padding: 25px; display: none; margin-bottom: 30px;
   }
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .info-item { 
-    background: #0a0a10; padding: 12px; border-radius: 8px; font-size: 0.9rem; 
+    background: #1b1e2e; padding: 12px; border-radius: 8px; font-size: 0.9rem; 
     border: 1px solid #333; color: #EEE;
   }
   .info-item.full { grid-column: span 2; }
@@ -123,19 +135,23 @@
   /* --- 드롭다운 --- */
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-    z-index: 9999; /* 최상위 보장 */
-    background: #000; border: 1px solid #444; border-radius: var(--radius);
+    z-index: 2000;
+    background: #0b0d17; /* 불투명 배경 */
+    border: 1px solid #444; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    transform: translateZ(0);
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; }
 
   /* --- 관리자 패널 --- */
   .admin-panel {
-    background: #080808; /* 완전 불투명 */
+    background: #080a12; /* 아주 진한 남색 불투명 */
     border: 1px solid #444; padding: 20px; border-radius: 12px; 
     margin-top: 30px; display: none; position: relative; 
     z-index: 500;
+    box-shadow: 0 10px 50px #000;
+    transform: translateZ(0);
   }
   .mini-btn { padding: 4px 8px; font-size: 0.75rem; margin-left: 2px; }
   .bg-blue { background: #1565C0; color: #FFF; }
@@ -144,18 +160,20 @@
   /* --- 모달 --- */
   #modalOverlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); /* 아주 진한 배경 */
-    z-index: 10000;
+    background: rgba(0,0,0,0.9);
+    z-index: 3000;
     align-items: center; justify-content: center;
+    transform: translateZ(0);
   }
   .modal-content {
-    background: #151520; border: 1px solid var(--accent); 
+    background: #151825; border: 1px solid var(--accent); 
     border-radius: var(--radius); padding: 25px; width: 90%; max-width: 400px;
+    box-shadow: 0 10px 40px #000;
   }
 
   footer {
     text-align: center; margin-top: 50px; padding: 20px;
-    color: #555; font-size: 0.8rem; border-top: 1px solid #222;
+    color: rgba(255,255,255,0.3); font-size: 0.8rem; border-top: 1px solid #222;
   }
 </style>
 </head>
@@ -164,14 +182,14 @@
 <div id="starfield"></div>
 
 <div id="loginScreen" style="text-align:center; margin-top:100px;">
-  <div style="font-size:3.5rem; margin-bottom:10px;">☁️</div>
+  <div style="font-size:3.5rem; margin-bottom:10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));">☁️</div>
   <h2 style="font-size:2.2rem; margin-bottom:30px; color:var(--text-main);">먼지 길드전</h2>
   
-  <div class="flat-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px;">
+  <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
     <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px; font-weight:bold;">먼지 길드전 입장</p>
     <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center;">
     <input type="password" id="codeInput" placeholder="CODE (6자리)" style="text-align:center; letter-spacing: 5px;">
-    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px;">입장하기</button>
+    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px; box-shadow: 0 0 15px var(--accent-glow);">입장하기</button>
   </div>
   <div style="margin-top:40px;">
     <button onclick="adminLogin()" style="background:transparent; color:#555; font-size:0.8rem;">[ 관리자 전용 ]</button>
@@ -204,12 +222,12 @@
   </div>
 
   <div style="position:relative; margin-bottom:25px; z-index:1000;">
-    <div class="flat-card" onclick="toggleDefDropdown()" style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+    <div class="glass-card" onclick="toggleDefDropdown()" style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
       <span id="defCurrentText" style="font-weight:bold;">🛡️ 방어팀을 선택해주세요</span>
       <span style="color:var(--accent);">▼</span>
     </div>
     <div id="defListDropdown" class="dropdown-list">
-      <div style="padding:10px; background:#000; position:sticky; top:0;">
+      <div style="padding:10px; background:#0b0d17; position:sticky; top:0;">
         <input type="text" id="defSearchInput" placeholder="🔍 검색..." oninput="filterDefense()" onclick="event.stopPropagation()">
       </div>
       <div id="defRealList"></div>
@@ -249,7 +267,7 @@
 
   <div style="margin-top:40px; border-top:1px solid #333; padding-top:20px;">
     <h3 style="font-size:1rem; color:#AAA;">☁️ 명예의 전당</h3>
-    <div id="rankingList" class="flat-card" style="padding:0; overflow:hidden; background:#111;"></div>
+    <div id="rankingList" class="glass-card" style="padding:0; overflow:hidden; background:rgba(0,0,0,0.2);"></div>
     <div id="moreRankMsg" style="text-align:center; color:#555; font-size:0.8rem; margin-top:10px; display:none;">* 11위 이하는 관리자에게만 표시됩니다.</div>
   </div>
 
@@ -330,7 +348,7 @@
     </div>
     <div>
       <div style="color:#B3E5FC; margin-bottom:5px;">📝 추천 방어팀 직접 추가</div>
-      <input type="text" id="rdInputName" placeholder="방어팀 이름 (예: 메타 1번)">
+      <input type="text" id="rdInputName" placeholder="예: 오공 프레이야 에이스">
       <input type="text" id="rdInputHeroes" placeholder="반지 추천">
       <input type="text" id="rdInputFormation" placeholder="진형">
       <input type="text" id="rdInputPet" placeholder="펫">
@@ -471,16 +489,20 @@ function checkPW() {
 }
 
 /* --- [공격 모드] 관련 스크립트 --- */
+// 공격 관리자 토글 (+ / - 버튼 텍스트 변경 적용)
 window.toggleAttackAdmin = () => {
   const panel = document.getElementById("attackAdminPanel");
+  const btn = document.getElementById("atkAdminBtn");
   if(panel.style.display === "none") {
     if(!checkPW()) return; 
     panel.style.display = "block";
+    btn.textContent = "- 닫기";
     renderUserKeys();
     renderAtkSuggestions();
     renderAdminUserList();
   } else {
     panel.style.display = "none";
+    btn.textContent = "+ 관리자";
   }
   renderRanking(); 
 };
@@ -494,7 +516,7 @@ window.toggleDefDropdown = () => {
   }
 };
 window.addEventListener('click', (e) => {
-  if (!e.target.closest('.flat-card') && !e.target.closest('.dropdown-list')) {
+  if (!e.target.closest('.glass-card') && !e.target.closest('.dropdown-list')) {
     document.getElementById("defListDropdown").style.display = "none";
   }
 });
@@ -534,7 +556,6 @@ window.loadAttackTeams = (dk) => {
   document.getElementById("attackCard").style.display = "none";
   document.getElementById("atkSuggestBtn").style.display = "block";
   
-  // [추가] 방어팀 변경 시 관리자 입력창 초기화
   document.getElementById("atkName").value = "";
   document.getElementById("atkType").value = "";
   document.getElementById("ringRec").value = "";
@@ -586,7 +607,6 @@ window.selectAttack = (dk, ak) => {
     document.getElementById("cardSkill").textContent = d.skill || "-";
     loadRecentRecord(dk, ak);
 
-    // 관리자 수정용 값 채우기
     document.getElementById("atkName").value = d.name;
     document.getElementById("atkType").value = d.type;
     document.getElementById("ringRec").value = d.ring;
@@ -687,14 +707,18 @@ window.rejectAtk = (dk,sk) => { if(confirm("거절?")) remove(ref(db, `suggestio
 
 
 /* --- [방어 모드] 관련 스크립트 --- */
+// 방어팀 관리자 토글 (+ / - 버튼 텍스트 변경 적용)
 window.toggleDefenseAdmin = () => {
   const panel = document.getElementById("defenseAdminPanel");
+  const btn = document.getElementById("defAdminBtn");
   if(panel.style.display === "none") {
     if(!checkPW()) return;
     panel.style.display = "block";
+    btn.textContent = "- 닫기";
     renderDefSuggestions();
   } else {
     panel.style.display = "none";
+    btn.textContent = "+ 관리자";
   }
 };
 
@@ -805,7 +829,6 @@ window.openModal = (type) => {
   if(type === 'attack') {
     if(!currentDefense) { alert("방어팀을 먼저 선택하세요."); closeModal(); return; }
     document.getElementById("modalTitle").textContent = "공격덱 제보";
-    // [변경] 타입 -> 속공
     body.innerHTML = `
       <input id="mName" placeholder="공격팀 이름 (필수)">
       <select id="mType"><option value="속공 따야 함">⚡ 속공 따야 함</option><option value="내줘도 됨">🛡️ 내줘도 됨</option></select>
