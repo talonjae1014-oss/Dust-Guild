@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☁️ 먼지 길드전 (Night Theme)</title>
+<title>☁️ 먼지 길드전 (Deep Night)</title>
 <style>
-  /* --- [스타일] Night Sky & Dark Glass (반전 매력 테마) --- */
+  /* --- [스타일] Deep Night & Starlight Contrast --- */
   :root {
-    /* 배경: 딥 네이비 ~ 차콜 그레이 밤하늘 */
-    --bg-gradient: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+    /* 배경: 완전한 어둠 ~ 깊은 네이비 (별 강조용) */
+    --bg-gradient: linear-gradient(to bottom, #02010a, #040416, #0b0b2e);
     
-    /* 텍스트: 밝은 아이보리 & 실버 그레이 (어두운 배경 대비) */
-    --text-main: #EAEAEA;
-    --text-sub: #B0B0B0;
+    /* 텍스트: 완전한 화이트 & 밝은 실버 (고대비) */
+    --text-main: #FFFFFF;
+    --text-sub: #D1D1D1;
     
-    /* 포인트: 밝은 미스트 블루 (빛나는 느낌) */
-    --accent: #A0C4E8; 
-    --accent-glow: rgba(160, 196, 232, 0.4);
+    /* 포인트: 아이스 블루 (차가운 별빛 느낌) */
+    --accent: #B3E5FC; 
+    --accent-glow: rgba(179, 229, 252, 0.6);
     
-    /* 카드 디자인: 어두운 유리 질감 */
-    --card-bg: rgba(30, 35, 45, 0.7); /* 반투명 다크 블루-그레이 */
-    --card-border: rgba(255, 255, 255, 0.15); /* 옅은 빛나는 테두리 */
-    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --backdrop-blur: blur(12px);
+    /* 카드 디자인: 아주 옅은 유리 (배경이 잘 비치도록) */
+    --card-bg: rgba(20, 30, 50, 0.6); 
+    --card-border: rgba(255, 255, 255, 0.12);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    --backdrop-blur: blur(8px);
     --radius: 16px;
   }
 
@@ -33,36 +33,37 @@
     font-family: 'Suit', sans-serif;
     margin: 0; padding: 20px; padding-bottom: 100px;
     line-height: 1.6;
-    position: relative; /* 별 배경을 위한 포지셔닝 */
+    position: relative;
     overflow-x: hidden;
   }
 
-  /* 배경 별 효과 (CSS 패턴) */
+  /* 배경 별 효과 (더 밝고 선명하게) */
   #starfield {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: -1;
     background-image: 
-      radial-gradient(1px 1px at 10% 10%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(1px 1px at 20% 30%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(2px 2px at 40% 70%, #DDD, rgba(0,0,0,0)),
-      radial-gradient(1px 1px at 60% 40%, #FFF, rgba(0,0,0,0)),
-      radial-gradient(2px 2px at 80% 80%, #EEE, rgba(0,0,0,0)),
-      radial-gradient(1px 1px at 90% 20%, #FFF, rgba(0,0,0,0));
-    background-size: 400px 400px;
-    opacity: 0.4;
+      radial-gradient(1.5px 1.5px at 10% 10%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 20% 30%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 40% 70%, #E3F2FD, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 60% 40%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(2.5px 2.5px at 80% 80%, #B3E5FC, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 90% 20%, #FFF, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 50% 50%, #FFF, rgba(0,0,0,0));
+    background-size: 300px 300px;
+    opacity: 0.8; /* 별 투명도 높임 */
   }
 
-  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
   h2 { font-size: 1.8rem; }
   
   button {
     cursor: pointer; border: none; padding: 12px 18px; border-radius: 10px;
     font-weight: bold; transition: 0.3s; font-size: 0.9rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   }
-  button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+  button:hover { transform: translateY(-2px); box-shadow: 0 0 15px var(--accent-glow); }
   
-  /* 공통 유리 카드 스타일 정의 */
+  /* 공통 유리 카드 */
   .glass-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -72,52 +73,52 @@
   }
 
   input, select, textarea {
-    background: rgba(0, 0, 0, 0.3); /* 더 어두운 반투명 배경 */
-    border: 1px solid var(--card-border); color: var(--text-main);
+    background: rgba(0, 0, 0, 0.4); /* 입력창 더 어둡게 */
+    border: 1px solid var(--card-border); color: #FFF;
     padding: 14px; border-radius: 10px; width: 100%;
     box-sizing: border-box; margin-bottom: 8px;
     font-size: 0.95rem; outline: none; transition: 0.3s;
   }
   input:focus, select:focus, textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-glow);
-    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 1px var(--accent);
+    background: rgba(0, 0, 0, 0.6);
   }
-  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
   
   select {
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A0C4E8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B3E5FC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 14px center;
     background-size: 16px;
   }
+  select option { background: #0b0b2e; color: #fff; } /* 드롭다운 옵션 배경 */
 
-  /* 드롭다운 (유리 카드 스타일) */
+  /* 드롭다운 Wrapper */
   .dropdown-wrapper { position: relative; margin-bottom: 25px; z-index: 100; }
   .glass-box {
-    /* .glass-card 스타일 상속 */
     background: var(--card-bg); border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur); -webkit-backdrop-filter: var(--backdrop-blur);
+    backdrop-filter: var(--backdrop-blur);
     box-shadow: var(--card-shadow); border-radius: var(--radius);
     padding: 20px; display: flex; justify-content: space-between; align-items: center;
     cursor: pointer; transition: 0.3s;
   }
-  .glass-box:hover { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+  .glass-box:hover { border-color: var(--accent); background: rgba(255,255,255,0.05); }
   
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%;
-    background: #1A1F29; /* 불투명한 어두운 배경 */
+    background: #02010a; /* 리스트는 가독성을 위해 불투명한 블랙 */
     border: 1px solid var(--card-border); border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.9);
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; color: var(--text-main); }
-  .dropdown-item:hover { background: rgba(160, 196, 232, 0.1); color: var(--accent); }
+  .dropdown-item:hover { background: rgba(179, 229, 252, 0.1); color: var(--accent); }
   
   .dropdown-add-btn {
     text-align: center; color: var(--accent); font-weight: bold; 
-    border-top: 1px dashed rgba(255,255,255,0.2); background: rgba(0,0,0,0.2);
+    border-top: 1px dashed rgba(255,255,255,0.2); background: rgba(255,255,255,0.03);
   }
 
   /* 공격팀 리스트 */
@@ -126,107 +127,101 @@
     gap: 12px; margin-bottom: 20px;
   }
   .attack-btn {
-    background: var(--card-bg); border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
     color: var(--text-sub); padding: 15px 5px; border-radius: 12px;
     min-height: 85px; text-align: center;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s;
   }
   .attack-btn.active {
-    background: rgba(160, 196, 232, 0.15); border: 1px solid var(--accent);
+    background: rgba(179, 229, 252, 0.15); border: 1px solid var(--accent);
     color: #FFF; font-weight: bold;
-    box-shadow: 0 0 20px var(--accent-glow);
+    box-shadow: 0 0 15px var(--accent-glow);
   }
 
-  /* 상세 정보 카드 (메인 - 유리 효과) */
+  /* 상세 정보 카드 */
   #attackCard {
-    /* .glass-card 스타일 상속 */
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    backdrop-filter: var(--backdrop-blur); -webkit-backdrop-filter: var(--backdrop-blur);
+    background: rgba(10, 15, 30, 0.7); border: 1px solid var(--card-border);
+    backdrop-filter: var(--backdrop-blur);
     box-shadow: var(--card-shadow); border-radius: var(--radius);
     padding: 25px; display: none; margin-bottom: 30px;
   }
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .info-item { 
-    background: rgba(0, 0, 0, 0.2); /* 더 어두운 아이템 배경 */
+    background: rgba(0, 0, 0, 0.4); 
     padding: 12px; border-radius: 8px; font-size: 0.95rem; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05); color: #EEE;
   }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
   
-  /* 승패 버튼: 톤다운된 컬러 */
-  .btn-win { background: #2E7D32; color: #FFF; width: 48%; padding: 15px; } /* 깊은 초록 */
-  .btn-lose { background: #C62828; color: #FFF; width: 48%; padding: 15px; } /* 깊은 빨강 */
-  .btn-win:hover { background: #388E3C; box-shadow: 0 0 15px rgba(46, 125, 50, 0.4); }
-  .btn-lose:hover { background: #D32F2F; box-shadow: 0 0 15px rgba(198, 40, 40, 0.4); }
+  /* 승패 버튼: 네온 느낌 */
+  .btn-win { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: #FFF; width: 48%; padding: 15px; border: 1px solid #43a047; }
+  .btn-lose { background: linear-gradient(135deg, #b71c1c, #c62828); color: #FFF; width: 48%; padding: 15px; border: 1px solid #e53935; }
+  .btn-win:hover { box-shadow: 0 0 20px rgba(76, 175, 80, 0.4); }
+  .btn-lose:hover { box-shadow: 0 0 20px rgba(244, 67, 54, 0.4); }
 
   /* 랭킹 리스트 */
   .rank-row {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem;
+    padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.95rem;
     color: var(--text-main);
   }
-  .rank-badge { margin-right: 5px; }
 
-  /* 관리자 패널 (약간 더 어두운 유리 배경) */
+  /* 관리자 패널 */
   #adminPanel {
-    background: rgba(20, 25, 35, 0.8); border: 1px solid var(--card-border);
+    background: rgba(10, 10, 20, 0.9); border: 1px solid var(--card-border);
     backdrop-filter: var(--backdrop-blur);
     padding: 20px; border-radius: 12px; margin-top: 30px; display: none;
   }
   .mini-btn { padding: 6px 10px; font-size: 0.8rem; margin-left: 2px; border-radius: 6px; }
-  .bg-blue { background: #1565C0; color: #FFF; }
-  .bg-red { background: #C62828; color: #FFF; }
+  .bg-blue { background: #1976D2; color: #FFF; }
+  .bg-red { background: #D32F2F; color: #FFF; }
 
   /* 키 관리 리스트 */
   .key-row {
     display: flex; justify-content: space-between; align-items: center;
-    background: rgba(0,0,0,0.3); padding: 10px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem;
+    border: 1px solid rgba(255,255,255,0.05);
   }
 
   /* 제보 모달 */
   #suggestModal {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); z-index: 2000;
-    align-items: center; justify-content: center; backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.85); z-index: 2000;
+    align-items: center; justify-content: center; backdrop-filter: blur(5px);
   }
   .modal-content {
-    /* .glass-card 스타일 상속 */
-    background: #1A1F29; /* 모달은 불투명하게 */
-    border: 1px solid var(--card-border); box-shadow: var(--card-shadow); border-radius: var(--radius);
+    background: #0b0b2e; 
+    border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(179, 229, 252, 0.1); border-radius: var(--radius);
     padding: 25px; width: 90%; max-width: 400px; color: var(--text-main);
   }
-
-  /* 제보 리스트 아이템 */
   .suggest-item {
-    background: rgba(0,0,0,0.3); padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05); padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
   }
 
   footer {
     text-align: center; margin-top: 50px; padding: 20px;
-    color: rgba(255,255,255,0.4); font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.3); font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05);
   }
-
-  /* 텍스트 유틸 */
-  .text-accent { color: var(--accent); }
-  .text-sub { color: var(--text-sub); }
 </style>
 </head>
 <body>
+
 <div id="starfield"></div>
 
 <div id="loginScreen" style="text-align:center; margin-top:100px;">
-  <div style="font-size:3rem; margin-bottom:10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));">☁️</div>
-  <h2 style="font-size:2rem; margin-bottom:30px; color:var(--text-main);">먼지 길드전</h2>
-  <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px;">
-    <p style="color:var(--text-sub); font-size:0.8rem; margin-bottom:15px;">관리자가 발급한 코드를 입력해주세요.</p>
-    <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center;">
-    <input type="password" id="codeInput" placeholder="접속 코드 (6자리)" style="text-align:center; letter-spacing: 5px;">
-    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#0F2027; margin-top:10px; font-size:1rem; padding:15px; box-shadow: 0 0 15px var(--accent-glow);">입장하기</button>
+  <div style="font-size:3.5rem; margin-bottom:10px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));">☁️</div>
+  <h2 style="font-size:2.2rem; margin-bottom:30px; color:var(--text-main); text-shadow: 0 0 20px rgba(179, 229, 252, 0.5);">먼지 길드전</h2>
+  
+  <div class="glass-card" style="padding:30px; display:inline-block; width: 80%; max-width: 300px; border: 1px solid rgba(255,255,255,0.15);">
+    <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:20px;">어둠 속에서 빛나는 먼지들의 기록</p>
+    <input type="text" id="nickInput" placeholder="닉네임" style="text-align:center; background:rgba(0,0,0,0.5);">
+    <input type="password" id="codeInput" placeholder="CODE (6자리)" style="text-align:center; letter-spacing: 5px; background:rgba(0,0,0,0.5);">
+    <button onclick="tryLogin()" style="width:100%; background:var(--accent); color:#02010a; margin-top:15px; font-size:1rem; padding:15px; box-shadow: 0 0 20px var(--accent-glow);">입장하기</button>
   </div>
-  <div style="margin-top:30px;">
-    <button onclick="adminLogin()" style="background:transparent; color:rgba(255,255,255,0.5); font-size:0.8rem; box-shadow:none; border:1px solid rgba(255,255,255,0.2);">[관리자 전용 입장]</button>
+  
+  <div style="margin-top:40px;">
+    <button onclick="adminLogin()" style="background:transparent; color:rgba(255,255,255,0.4); font-size:0.8rem; box-shadow:none; border:1px solid rgba(255,255,255,0.1);">[ 관리자 전용 ]</button>
   </div>
 </div>
 
@@ -234,10 +229,10 @@
   
   <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
     <div>
-      <div id="currentNick" style="color:var(--text-main); font-weight:bold; font-size:1.1rem; margin-bottom:4px; text-shadow: 0 0 10px rgba(255,255,255,0.2);"></div>
+      <div id="currentNick" style="color:var(--text-main); font-weight:bold; font-size:1.2rem; margin-bottom:4px; text-shadow: 0 0 10px rgba(255,255,255,0.3);"></div>
       <div id="myStats" style="color:var(--text-sub); font-size:0.85rem;">내 전적 로딩중...</div>
     </div>
-    <button onclick="toggleAdmin()" id="adminBtn" style="background:rgba(255,255,255,0.1); color:var(--text-main); font-size:0.8rem; padding:6px 12px; border:1px solid var(--card-border);">+ 관리자</button>
+    <button onclick="toggleAdmin()" id="adminBtn" style="background:rgba(255,255,255,0.08); color:var(--text-main); font-size:0.8rem; padding:6px 12px; border:1px solid var(--card-border);">+ 관리자</button>
   </div>
 
   <div class="dropdown-wrapper">
@@ -248,7 +243,7 @@
     </div>
     
     <div id="defListDropdown" class="dropdown-list">
-      <div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.1); background:#1A1F29; position:sticky; top:0; z-index:10;">
+      <div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.1); background:#02010a; position:sticky; top:0; z-index:10;">
         <input type="text" id="defSearchInput" placeholder="🔍 방어팀 검색..." style="margin:0;" oninput="filterDefense()" onclick="event.stopPropagation()">
       </div>
       <div id="defRealList"></div>
@@ -266,11 +261,11 @@
 
   <div id="attackCard">
     <h2 style="border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; margin-bottom:10px;">
-      <span id="cardFire"></span> <span id="cardName" style="color:var(--text-main); text-shadow: 0 0 5px rgba(255,255,255,0.3);"></span>
+      <span id="cardFire"></span> <span id="cardName" style="color:var(--text-main); text-shadow: 0 0 8px rgba(255,255,255,0.5);"></span>
       <span style="float:right; font-size:0.6em; color:var(--text-sub); font-weight:normal;">
         승률 <span id="cardRate" style="color:var(--accent); font-size:1.4em; font-weight:bold; text-shadow: 0 0 10px var(--accent-glow);">0</span>%
       </span>
-      <div id="cardMaker" style="font-size:0.4em; color:var(--text-sub); font-weight:normal; margin-top:5px;"></div>
+      <div id="cardMaker" style="font-size:0.4em; color:rgba(255,255,255,0.5); font-weight:normal; margin-top:5px;"></div>
     </h2>
     <div class="info-grid">
       <div class="info-item"><span class="info-label">전적</span><span id="cardWin">0</span>승 <span id="cardLose">0</span>패</div>
@@ -289,20 +284,20 @@
       <button class="btn-lose" onclick="addLose()">💀 패배</button>
     </div>
     <div style="text-align:right; margin-top:10px;">
-       <button onclick="resetRecord()" style="background:transparent; color:rgba(255,255,255,0.4); font-size:0.8rem; text-decoration:underline; box-shadow:none;">[관리자] 기록 초기화</button>
+       <button onclick="resetRecord()" style="background:transparent; color:rgba(255,255,255,0.3); font-size:0.8rem; text-decoration:underline; box-shadow:none;">[관리자] 기록 초기화</button>
     </div>
   </div>
 
   <div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
     <h3 style="color:var(--text-main); font-size:1rem;">☁️ 명예의 전당 (승리 랭킹)</h3>
-    <div id="rankingList" class="glass-card" style="padding: 0; overflow: hidden;"></div>
-    <div id="moreRankMsg" style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.8rem; margin-top:10px; display:none;">* 11위 이하는 관리자에게만 표시됩니다.</div>
+    <div id="rankingList" class="glass-card" style="padding: 0; overflow: hidden; background:rgba(0,0,0,0.2);"></div>
+    <div id="moreRankMsg" style="text-align:center; color:rgba(255,255,255,0.3); font-size:0.8rem; margin-top:10px; display:none;">* 11위 이하는 관리자에게만 표시됩니다.</div>
   </div>
 
   <div id="adminPanel">
     <h3>🛠️ 관리자 패널</h3>
     
-    <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+    <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
       <h4 style="color:var(--accent);">🔑 길드원 접속 키 관리</h4>
       <div style="display:flex; gap:5px; margin-bottom:10px;">
         <input type="text" id="newUserNick" placeholder="길드원 닉네임" style="margin:0;">
@@ -311,7 +306,7 @@
       <div id="userKeyList" style="max-height:200px; overflow-y:auto; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;"></div>
     </div>
 
-    <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
       <h4 style="color:#EF5350;">🔔 대기 중인 제보</h4>
       <div id="suggestionList" style="color:var(--text-sub); font-size:0.9rem;">(제보된 덱이 없습니다)</div>
     </div>
@@ -352,7 +347,7 @@
 
   <footer>
     <div style="margin-bottom:5px;">Designed & Developed by <b>먼지</b></div>
-    <div style="font-size:0.7rem; color:rgba(255,255,255,0.4);">Copyright © 2024 Dust Guild. All rights reserved.</div>
+    <div style="font-size:0.7rem; color:rgba(255,255,255,0.3);">Copyright © 2024 Dust Guild. All rights reserved.</div>
   </footer>
 </div>
 
@@ -375,7 +370,7 @@
     <textarea id="sugArmor" rows="2" placeholder="장비세팅 및 특이사항"></textarea>
     <input type="text" id="sugSkill" placeholder="스킬 순서">
     <div style="display:flex; gap:10px; margin-top:10px;">
-      <button onclick="submitSuggestion()" style="flex:1; background:var(--accent); color:#0F2027;">제보하기</button>
+      <button onclick="submitSuggestion()" style="flex:1; background:var(--accent); color:#02010a; font-weight:bold;">제보하기</button>
       <button onclick="closeSuggestModal()" style="flex:1; background:rgba(255,255,255,0.1); color:var(--text-main);">취소</button>
     </div>
   </div>
@@ -873,7 +868,7 @@ function renderRanking() {
     const total = myData.totalWin + myData.totalLose;
     const rate = total ? Math.round(myData.totalWin / total * 100) : 0;
     myStatDiv.innerHTML = `내 전적: ${myRankIndex + 1}위 / ${myData.totalWin}승 ${myData.totalLose}패 (${rate}%)`;
-    myStatDiv.style.color = "#A0C4E8";
+    myStatDiv.style.color = "#B3E5FC";
   } else {
     myStatDiv.innerHTML = "내 전적: 아직 기록이 없습니다"; 
     myStatDiv.style.color = "rgba(255,255,255,0.4)";
