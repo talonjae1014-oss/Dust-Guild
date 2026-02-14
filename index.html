@@ -5,29 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>☁️ 먼지 길드전 (Deep Navy)</title>
 <style>
-  /* --- [스타일] Deep Navy Night Theme (Stable) --- */
+  /* --- [스타일] Deep Navy Night Theme --- */
   :root {
-    /* 배경: 칠흑 같은 어둠이 아닌, 깊은 네이비 톤 */
     --bg-color: #0b0d17; 
     --bg-gradient: linear-gradient(to bottom, #0b0d17 0%, #101426 50%, #181b36 100%);
-    
     --text-main: #FFFFFF;
     --text-sub: #D1D1D1;
     --accent: #B3E5FC; 
-    --accent-glow: rgba(179, 229, 252, 0.4);
-    
-    /* 카드: 약간의 남색 기운이 도는 반투명 블랙 */
     --card-bg: rgba(20, 25, 40, 0.6); 
     --card-border: rgba(255, 255, 255, 0.1);
     --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     --radius: 16px;
   }
 
-  html {
-    background-color: var(--bg-color); /* 모바일 흰 화면 방지용 안전장치 */
-    height: 100%;
-  }
-
+  html { background-color: var(--bg-color); height: 100%; }
   body {
     background: var(--bg-gradient);
     min-height: 100vh;
@@ -39,11 +30,9 @@
     overflow-x: hidden;
   }
 
-  /* 별 배경: 안전한 CSS 패턴 사용 */
   #starfield {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: -1;
-    /* 작은 별들이 떠있는 느낌 */
     background-image: 
       radial-gradient(1.5px 1.5px at 15% 15%, #FFF, transparent),
       radial-gradient(1px 1px at 50% 20%, #FFF, transparent),
@@ -55,7 +44,7 @@
     opacity: 0.6; 
   }
 
-  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 0 10px rgba(0,0,0,0.3); }
+  h2, h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 700; letter-spacing: -0.5px; }
   
   button {
     cursor: pointer; border: none; padding: 12px 18px; border-radius: 10px;
@@ -64,7 +53,6 @@
   }
   button:active { transform: scale(0.98); }
 
-  /* --- 공통 UI 요소 --- */
   .glass-card {
     background: var(--card-bg); 
     border: 1px solid var(--card-border);
@@ -73,17 +61,19 @@
   }
 
   input, select, textarea {
-    background: #151828; /* 아주 어두운 네이비 */
-    border: 1px solid #444; color: #FFF;
+    background: #151828; border: 1px solid #444; color: #FFF;
     padding: 14px; border-radius: 10px; width: 100%;
     box-sizing: border-box; margin-bottom: 8px;
     font-size: 0.95rem; outline: none;
   }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #0b0d17; }
   
-  /* --- 대시보드 --- */
-  #dashboardScreen { display: none; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto; margin-top: 50px; }
+  /* 대시보드 */
+  #dashboardScreen { display: none; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto; margin-top: 30px; }
   
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .logout-btn { background: rgba(255, 59, 48, 0.2); color: #FF3B30; border: 1px solid rgba(255, 59, 48, 0.3); padding: 8px 12px; font-size: 0.8rem; }
+
   .dash-btn-big {
     background: linear-gradient(135deg, #1565C0, #0D47A1);
     color: #FFF; font-size: 1.5rem; height: 150px;
@@ -97,11 +87,9 @@
     border: 1px solid rgba(255,255,255,0.1);
   }
   
-  /* --- 네비게이션 --- */
   .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .back-btn { background: rgba(255,255,255,0.1); color: #AAA; padding: 8px 12px; font-size: 0.8rem; }
 
-  /* --- 리스트 그리드 --- */
   .grid-list {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 12px; margin-bottom: 20px;
@@ -118,7 +106,6 @@
     color: #FFF; font-weight: bold; box-shadow: 0 0 15px var(--accent-glow);
   }
 
-  /* --- 상세 정보 카드 --- */
   .detail-card {
     background: #121420; border: 1px solid #333;
     box-shadow: var(--card-shadow); border-radius: var(--radius);
@@ -132,38 +119,35 @@
   .info-item.full { grid-column: span 2; }
   .info-label { display: block; color: var(--accent); font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
 
-  /* --- 드롭다운 --- */
   .dropdown-list {
     display: none; position: absolute; top: 100%; left: 0; width: 100%; 
     z-index: 2000;
-    background: #0b0d17; /* 불투명 배경 */
-    border: 1px solid #444; border-radius: var(--radius);
+    background: #0b0d17; border: 1px solid #444; border-radius: var(--radius);
     margin-top: 8px; max-height: 400px; overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0,0,0,0.9);
     transform: translateZ(0);
   }
   .dropdown-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; }
 
-  /* --- 관리자 패널 --- */
   .admin-panel {
-    background: #080a12; /* 아주 진한 남색 불투명 */
-    border: 1px solid #444; padding: 20px; border-radius: 12px; 
-    margin-top: 30px; display: none; position: relative; 
-    z-index: 500;
-    box-shadow: 0 10px 50px #000;
-    transform: translateZ(0);
+    background: #080a12; border: 1px solid #444; padding: 20px; border-radius: 12px; 
+    margin-top: 30px; display: none; position: relative; z-index: 500;
+    box-shadow: 0 10px 50px #000; transform: translateZ(0);
   }
   .mini-btn { padding: 4px 8px; font-size: 0.75rem; margin-left: 2px; }
   .bg-blue { background: #1565C0; color: #FFF; }
   .bg-red { background: #C62828; color: #FFF; }
 
-  /* --- 모달 --- */
+  /* 유저 승패 관리 리스트 */
+  .user-stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem;
+  }
+
   #modalOverlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    z-index: 3000;
-    align-items: center; justify-content: center;
-    transform: translateZ(0);
+    background: rgba(0,0,0,0.9); z-index: 3000;
+    align-items: center; justify-content: center; transform: translateZ(0);
   }
   .modal-content {
     background: #151825; border: 1px solid var(--accent); 
@@ -197,8 +181,9 @@
 </div>
 
 <div id="dashboardScreen">
-  <div style="text-align:center; margin-bottom:10px;">
-    <h3 id="dashNick" style="color:var(--accent);">환영합니다</h3>
+  <div class="dash-header">
+    <h3 id="dashNick" style="color:var(--accent); margin:0;">환영합니다</h3>
+    <button onclick="doLogout()" class="logout-btn">로그아웃</button>
   </div>
   
   <button class="dash-btn-big" onclick="goAttackMode()">
@@ -218,6 +203,7 @@
   </div>
 
   <div style="margin-bottom:20px;">
+    <div id="currentNick" style="color:var(--text-main); font-weight:bold; font-size:1.1rem; margin-bottom:4px;"></div>
     <div id="myStats" style="color:var(--text-sub); font-size:0.85rem;">내 전적 로딩중...</div>
   </div>
 
@@ -307,8 +293,10 @@
         <input type="text" id="newUserNick" placeholder="닉네임">
         <button onclick="issueKey()" style="background:#2E7D32; color:#fff; width:60px;">발급</button>
       </div>
-      <div id="userKeyList" style="max-height:150px; overflow-y:auto;"></div>
-      <div id="adminUserList" style="max-height:200px; overflow-y:auto; margin-top:10px; border-top:1px solid #333;"></div>
+      <div id="userKeyList" style="max-height:150px; overflow-y:auto; margin-bottom:15px;"></div>
+      
+      <div style="color:#B3E5FC; margin-bottom:5px; border-top:1px solid #333; padding-top:15px;">👥 유저 승패 수정</div>
+      <div id="adminUserList" style="max-height:200px; overflow-y:auto;"></div>
     </div>
   </div>
 </div>
@@ -417,7 +405,7 @@ window.onload = () => {
   }
 };
 
-/* --- 화면 전환 로직 --- */
+/* --- 화면 전환 --- */
 function showLogin() {
   document.getElementById("loginScreen").style.display = "block";
   document.getElementById("dashboardScreen").style.display = "none";
@@ -439,6 +427,8 @@ window.goAttackMode = () => {
   document.getElementById("dashboardScreen").style.display = "none";
   document.getElementById("attackScreen").style.display = "block";
   document.getElementById("currentNick").textContent = `닉네임 : ${myNick}`;
+  document.getElementById("myStats").textContent = "내 전적 로딩중...";
+  renderRanking(); 
 };
 
 window.goDefenseMode = () => {
@@ -447,7 +437,14 @@ window.goDefenseMode = () => {
   loadRecDefenseList(); 
 };
 
-/* --- 로그인 로직 --- */
+window.doLogout = () => {
+  if(!confirm("로그아웃 하시겠습니까?")) return;
+  localStorage.removeItem("nickname");
+  localStorage.removeItem("accessKey");
+  location.reload();
+};
+
+/* --- 로그인 --- */
 window.tryLogin = () => {
   const nick = document.getElementById("nickInput").value.trim();
   const key = document.getElementById("codeInput").value.trim();
@@ -458,7 +455,7 @@ window.tryLogin = () => {
 async function checkLogin(nick, key, isAuto) {
   const userRef = ref(db, `allowedUsers/${nick}`);
   const snap = await get(userRef);
-  if (snap.exists() && snap.val().code === key) {
+  if (snap.exists() && String(snap.val().code) === key) {
     localStorage.setItem("nickname", nick);
     localStorage.setItem("accessKey", key); 
     myNick = nick;
@@ -488,8 +485,7 @@ function checkPW() {
   return false;
 }
 
-/* --- [공격 모드] 관련 스크립트 --- */
-// 공격 관리자 토글 (+ / - 버튼 텍스트 변경 적용)
+/* --- [공격 모드] --- */
 window.toggleAttackAdmin = () => {
   const panel = document.getElementById("attackAdminPanel");
   const btn = document.getElementById("atkAdminBtn");
@@ -707,7 +703,6 @@ window.rejectAtk = (dk,sk) => { if(confirm("거절?")) remove(ref(db, `suggestio
 
 
 /* --- [방어 모드] 관련 스크립트 --- */
-// 방어팀 관리자 토글 (+ / - 버튼 텍스트 변경 적용)
 window.toggleDefenseAdmin = () => {
   const panel = document.getElementById("defenseAdminPanel");
   const btn = document.getElementById("defAdminBtn");
@@ -878,10 +873,18 @@ function submitDefenseSug() {
 
 function renderRanking() {
   const list = document.getElementById("rankingList");
+  // [수정] 전적 없는 경우도 닉네임 기본 표시
+  const myStatDiv = document.getElementById("myStats");
+  if(myStatDiv) myStatDiv.textContent = `내 전적: ${myNick} / 0승 0패 (0%)`;
+
   onValue(ref(db,"logs"), snap => {
     allLogsCache = snap.val() || {};
     list.innerHTML = "";
-    if(!Object.keys(allLogsCache).length) { list.innerHTML="<div style='text-align:center; padding:10px; color:#555'>기록 없음</div>"; return; }
+    
+    if(!Object.keys(allLogsCache).length) { 
+        list.innerHTML="<div style='text-align:center; padding:10px; color:#555'>기록 없음</div>"; 
+        return; 
+    }
     
     const stats = {};
     Object.values(allLogsCache).forEach(v => {
@@ -902,7 +905,7 @@ function renderRanking() {
     const myD = rankData.find(x=>x.nick===myNick);
     if(myD) {
       const tot = myD.w+myD.l; 
-      document.getElementById("myStats").textContent = `내 전적: ${rankData.indexOf(myD)+1}위 / ${myD.w}승 ${myD.l}패 (${tot?Math.round(myD.w/tot*100):0}%)`;
+      if(myStatDiv) myStatDiv.textContent = `내 전적: ${rankData.indexOf(myD)+1}위 / ${myD.w}승 ${myD.l}패 (${tot?Math.round(myD.w/tot*100):0}%)`;
     }
 
     let hide = 0;
@@ -915,7 +918,8 @@ function renderRanking() {
       const rr = rTot ? Math.round(d.rw/rTot*100) : 0;
       
       const div = document.createElement("div");
-      div.className = "rank-row";
+      div.className = "user-stat-row";
+      div.style.borderBottom="1px solid rgba(255,255,255,0.1)";
       let badge = `<span style="width:20px; text-align:center; display:inline-block; color:#666;">${i+1}</span>`;
       if(i===0) badge="🥇"; if(i===1) badge="🥈"; if(i===2) badge="🥉";
       
@@ -933,10 +937,10 @@ function renderRanking() {
 }
 
 window.issueKey = async () => {
-  const n = document.getElementById("newUserNick").value;
+  const n = document.getElementById("newUserNick").value.trim();
   if(!n) return;
   const c = Math.floor(100000+Math.random()*900000);
-  await set(ref(db, `allowedUsers/${n}`), { code:c, createdAt:Date.now() });
+  await set(ref(db, `allowedUsers/${n}`), { code:c.toString(), createdAt:Date.now() });
   document.getElementById("newUserNick").value="";
 };
 
@@ -947,7 +951,7 @@ function renderUserKeys() {
     const d = snap.val(); if(!d) return;
     Object.entries(d).forEach(([n,v]) => {
       const r = document.createElement("div");
-      r.className = "key-row";
+      r.className = "user-stat-row";
       r.innerHTML = `
         <div><b style="color:#fff">${n}</b> <span style="color:#AAA; margin-left:5px;">${v.code}</span></div>
         <button onclick="deleteUser('${n}')" style="background:#700; color:#fff; font-size:0.7rem; padding:3px 6px;">삭제</button>
@@ -961,9 +965,57 @@ window.deleteUser = async (n) => {
   await remove(ref(db, `allowedUsers/${n}`));
 };
 
+window.adjustScore = async (nick, type, delta) => {
+  if(delta === 1) {
+    push(ref(db,"logs"),{
+      nick: nick, result: type, defense: "admin", attack: "manual_adjust",
+      attackName: "관리자수정", attackType: "", date: new Date().toISOString().slice(0,10), time: Date.now()
+    });
+  } else {
+    const snap = await get(ref(db, "logs"));
+    if(!snap.exists()) return alert("기록 없음");
+    const logs = Object.entries(snap.val()).map(([k,v]) => ({...v, key:k}))
+      .filter(v => v.nick === nick && v.result === type).sort((a,b) => b.time - a.time);
+    if(logs.length === 0) return alert("기록 없음");
+    await remove(ref(db, `logs/${logs[0].key}`));
+  }
+};
+
 function renderAdminUserList() {
-  const div = document.getElementById("adminUserList");
-  // (유저 승패 수정 로직 생략)
+  const listDiv = document.getElementById("adminUserList"); listDiv.innerHTML = "";
+  const stat = {};
+  
+  // 전체 로그에서 유저 집계
+  Object.values(allLogsCache).forEach(v=>{
+    if(!stat[v.nick]) stat[v.nick] = {w:0, l:0};
+    if(v.result === "win") stat[v.nick].w++; else stat[v.nick].l++;
+  });
+  
+  // 키 발급된 유저도 목록에 포함 (전적 없어도 뜨게)
+  get(ref(db, "allowedUsers")).then(snap => {
+    const users = snap.val() || {};
+    Object.keys(users).forEach(u => {
+        if(!stat[u]) stat[u] = {w:0, l:0};
+    });
+
+    Object.keys(stat).sort().forEach(nick => {
+      const val = stat[nick];
+      const div = document.createElement("div");
+      div.className = "user-stat-row";
+      div.innerHTML = `
+        <span style="font-weight:bold; width:80px; color:var(--text-main);">${nick}</span>
+        <div style="display:flex; align-items:center; gap:5px;">
+          <span style="color:#66BB6A; font-size:0.8rem;">승:${val.w}</span>
+          <button class="mini-btn bg-blue" onclick="adjustScore('${nick}','win',1)">+</button>
+          <button class="mini-btn bg-red" onclick="adjustScore('${nick}','win',-1)">-</button>
+          <span style="color:#EF5350; font-size:0.8rem; margin-left:5px;">패:${val.l}</span>
+          <button class="mini-btn bg-blue" onclick="adjustScore('${nick}','lose',1)">+</button>
+          <button class="mini-btn bg-red" onclick="adjustScore('${nick}','lose',-1)">-</button>
+        </div>
+      `;
+      listDiv.appendChild(div);
+    });
+  });
 }
 </script>
 </body>
