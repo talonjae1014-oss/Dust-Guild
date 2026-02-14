@@ -12,7 +12,8 @@
     --text-main: #FFFFFF;
     --text-sub: #D1D1D1;
     --accent: #B3E5FC; 
-    --card-bg: rgba(20, 25, 40, 0.6); 
+    --accent-glow: rgba(179, 229, 252, 0.4);
+    --card-bg: rgba(20, 30, 50, 0.5); 
     --card-border: rgba(255, 255, 255, 0.1);
     --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     --radius: 16px;
@@ -144,7 +145,8 @@
     padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem;
   }
 
-  #modalOverlay {
+  /* 모달 공통 */
+  .modal-overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 3000;
     align-items: center; justify-content: center; transform: translateZ(0);
@@ -152,7 +154,7 @@
   .modal-content {
     background: #151825; border: 1px solid var(--accent); 
     border-radius: var(--radius); padding: 25px; width: 90%; max-width: 400px;
-    box-shadow: 0 10px 40px #000;
+    box-shadow: 0 10px 40px #000; max-height: 90vh; overflow-y: auto;
   }
 
   footer {
@@ -238,6 +240,7 @@
       <div class="info-item"><span class="info-label">속공</span><span id="cardType">-</span></div>
       <div class="info-item"><span class="info-label">반지</span><span id="cardRing">-</span></div>
       <div class="info-item"><span class="info-label">펫</span><span id="cardPet">-</span></div>
+      <div class="info-item full"><span class="info-label">진형</span><span id="cardFormation">-</span></div>
       <div class="info-item full"><span class="info-label">스킬순서</span><span id="cardSkill">-</span></div>
       <div class="info-item full"><span class="info-label">장비세팅 및 특이사항</span><span id="cardArmor">-</span></div>
       <div class="info-item full"><span class="info-label">최근 5경기</span><div id="recentRecord" style="letter-spacing:3px;">-</div></div>
@@ -279,6 +282,7 @@
       </select>
       <input type="text" id="ringRec" placeholder="반지">
       <input type="text" id="atkPet" placeholder="펫">
+      <input type="text" id="atkFormation" placeholder="진형">
       <textarea id="armorRec" rows="2" placeholder="장비/특이사항"></textarea>
       <input type="text" id="skillOrder" placeholder="스킬">
       <div style="margin-top:5px;">
@@ -350,13 +354,25 @@
   </div>
 </div>
 
-<div id="modalOverlay">
+<div id="modalOverlay" class="modal-overlay">
   <div class="modal-content">
     <h3 id="modalTitle" style="color:var(--text-main); margin-bottom:15px;">제보하기</h3>
     <div id="modalBody"></div>
     <div style="display:flex; gap:10px; margin-top:15px;">
       <button id="modalSubmitBtn" style="flex:1; background:var(--accent); color:#000;">제보</button>
       <button onclick="closeModal()" style="flex:1; background:#333; color:#fff;">취소</button>
+    </div>
+  </div>
+</div>
+
+<div id="adminReviewModal" class="modal-overlay">
+  <div class="modal-content" style="border-color:#EF5350;">
+    <h3 style="color:#FFF; margin-bottom:15px;">🧐 제보 상세 검토</h3>
+    <div id="adminReviewBody" style="font-size:0.9rem; color:#DDD; margin-bottom:20px;"></div>
+    <div style="display:flex; gap:10px;">
+      <button id="btnReviewApprove" style="flex:1; background:#2E7D32; color:#FFF;">승인</button>
+      <button id="btnReviewReject" style="flex:1; background:#C62828; color:#FFF;">거절</button>
+      <button onclick="closeAdminReviewModal()" style="flex:1; background:#333; color:#FFF;">닫기</button>
     </div>
   </div>
 </div>
@@ -556,6 +572,7 @@ window.loadAttackTeams = (dk) => {
   document.getElementById("atkType").value = "";
   document.getElementById("ringRec").value = "";
   document.getElementById("atkPet").value = "";
+  document.getElementById("atkFormation").value = ""; 
   document.getElementById("armorRec").value = "";
   document.getElementById("skillOrder").value = "";
 
@@ -599,6 +616,8 @@ window.selectAttack = (dk, ak) => {
     document.getElementById("cardType").textContent = d.type || "-";
     document.getElementById("cardRing").textContent = d.ring || "-";
     document.getElementById("cardPet").textContent = d.pet || "-";
+    document.getElementById("cardFormation").textContent = d.formation || "-";
+    
     document.getElementById("cardArmor").textContent = d.armor || "-";
     document.getElementById("cardSkill").textContent = d.skill || "-";
     loadRecentRecord(dk, ak);
@@ -607,6 +626,7 @@ window.selectAttack = (dk, ak) => {
     document.getElementById("atkType").value = d.type;
     document.getElementById("ringRec").value = d.ring;
     document.getElementById("atkPet").value = d.pet||"";
+    document.getElementById("atkFormation").value = d.formation||"";
     document.getElementById("armorRec").value = d.armor;
     document.getElementById("skillOrder").value = d.skill;
   });
@@ -654,6 +674,7 @@ window.addAttack = ()=>{
   push(ref(db,`defenseTeams/${currentDefense}/attackTeams`), {
     name:document.getElementById("atkName").value, type:document.getElementById("atkType").value,
     ring:document.getElementById("ringRec").value, pet:document.getElementById("atkPet").value,
+    formation:document.getElementById("atkFormation").value, 
     armor:document.getElementById("armorRec").value, skill:document.getElementById("skillOrder").value, win:0, lose:0
   });
 };
@@ -662,12 +683,14 @@ window.editAttack = ()=>{
   update(ref(db,`defenseTeams/${currentDefense}/attackTeams/${currentAttack}`), {
     name:document.getElementById("atkName").value, type:document.getElementById("atkType").value,
     ring:document.getElementById("ringRec").value, pet:document.getElementById("atkPet").value,
+    formation:document.getElementById("atkFormation").value,
     armor:document.getElementById("armorRec").value, skill:document.getElementById("skillOrder").value
   });
   alert("수정됨");
 };
 window.delAttack = ()=>{ if(checkPW()) remove(ref(db,`defenseTeams/${currentDefense}/attackTeams/${currentAttack}`)); };
 
+// 제보 (공격)
 function renderAtkSuggestions() {
   const div = document.getElementById("atkSuggestionList");
   onValue(ref(db, "suggestions/attack"), snap => {
@@ -681,25 +704,70 @@ function renderAtkSuggestions() {
         d.style.marginBottom="10px"; d.style.borderBottom="1px solid #333";
         d.innerHTML = `
           <div style="color:#FFF">[${dName}] ${v.name}</div>
-          <div style="font-size:0.8rem">${v.suggester}</div>
-          <button class="mini-btn bg-blue" onclick="approveAtk('${dk}','${sk}')">승인</button>
-          <button class="mini-btn bg-red" onclick="rejectAtk('${dk}','${sk}')">거절</button>
+          <div style="font-size:0.8rem; color:#888;">제보자: ${v.suggester}</div>
+          <button class="mini-btn bg-blue" onclick="openAdminReview('attack', '${dk}', '${sk}')">검토</button>
         `;
         div.appendChild(d);
       });
     });
   });
 }
+
+// [NEW] 관리자 검토 모달 관련
+window.openAdminReview = async (type, k1, k2) => {
+  document.getElementById("adminReviewModal").style.display = "flex";
+  const body = document.getElementById("adminReviewBody");
+  body.innerHTML = "로딩중...";
+  
+  let path = type === 'attack' ? `suggestions/attack/${k1}/${k2}` : `suggestions/defense/${k1}`;
+  const snap = await get(ref(db, path));
+  const data = snap.val();
+  
+  if(!data) {
+    body.innerHTML = "데이터가 존재하지 않습니다.";
+    return;
+  }
+
+  let html = `<p><b style="color:var(--accent)">이름:</b> ${data.name}</p>`;
+  if(type === 'attack') {
+    html += `
+      <p><b>속공:</b> ${data.type}</p>
+      <p><b>반지:</b> ${data.ring}</p>
+      <p><b>펫:</b> ${data.pet}</p>
+      <p><b>진형:</b> ${data.formation || '-'}</p>
+      <p><b>장비/팁:</b> ${data.armor}</p>
+      <p><b>스킬:</b> ${data.skill}</p>
+    `;
+    document.getElementById("btnReviewApprove").onclick = () => { approveAtk(k1, k2); closeAdminReviewModal(); };
+    document.getElementById("btnReviewReject").onclick = () => { rejectAtk(k1, k2); closeAdminReviewModal(); };
+  } else {
+    html += `
+      <p><b>반지 추천:</b> ${data.heroes}</p>
+      <p><b>진형:</b> ${data.formation}</p>
+      <p><b>펫:</b> ${data.pet}</p>
+      <p><b>설명:</b> ${data.desc}</p>
+    `;
+    document.getElementById("btnReviewApprove").onclick = () => { approveDef(k1); closeAdminReviewModal(); };
+    document.getElementById("btnReviewReject").onclick = () => { rejectDef(k1); closeAdminReviewModal(); };
+  }
+  body.innerHTML = html;
+};
+window.closeAdminReviewModal = () => { document.getElementById("adminReviewModal").style.display = "none"; };
+
 window.approveAtk = async (dk, sk) => {
-  if(!confirm("승인?")) return;
   const snap = await get(ref(db, `suggestions/attack/${dk}/${sk}`));
   const d = snap.val();
+  if(!d) return;
   await push(ref(db, `defenseTeams/${dk}/attackTeams`), {
-    name:d.name, type:d.type, ring:d.ring, pet:d.pet, armor:d.armor, skill:d.skill, win:0, lose:0, maker:d.suggester
+    name:d.name, type:d.type, ring:d.ring, pet:d.pet, 
+    formation:d.formation, armor:d.armor, skill:d.skill, win:0, lose:0, maker:d.suggester
   });
   await remove(ref(db, `suggestions/attack/${dk}/${sk}`));
+  alert("승인되었습니다.");
 };
-window.rejectAtk = (dk,sk) => { if(confirm("거절?")) remove(ref(db, `suggestions/attack/${dk}/${sk}`)); };
+window.rejectAtk = (dk,sk) => { 
+  if(confirm("거절하시겠습니까?")) remove(ref(db, `suggestions/attack/${dk}/${sk}`)); 
+};
 
 
 /* --- [방어 모드] 관련 스크립트 --- */
@@ -794,24 +862,26 @@ function renderDefSuggestions() {
       d.style.marginBottom="10px"; d.style.borderBottom="1px solid #333";
       d.innerHTML = `
         <div style="color:#FFF">${v.name}</div>
-        <div style="font-size:0.8rem">${v.heroes} / ${v.suggester}</div>
-        <button class="mini-btn bg-blue" onclick="approveDef('${k}')">승인</button>
-        <button class="mini-btn bg-red" onclick="rejectDef('${k}')">거절</button>
+        <div style="font-size:0.8rem; color:#888;">제보자: ${v.suggester}</div>
+        <button class="mini-btn bg-blue" onclick="openAdminReview('defense', '${k}', '')">검토</button>
       `;
       div.appendChild(d);
     });
   });
 }
 window.approveDef = async (key) => {
-  if(!confirm("승인?")) return;
   const snap = await get(ref(db, `suggestions/defense/${key}`));
   const d = snap.val();
+  if(!d) return;
   await push(ref(db, "recommendedDefenses"), {
     name:d.name, heroes:d.heroes, formation:d.formation, pet:d.pet, desc:d.desc, maker:d.suggester
   });
   await remove(ref(db, `suggestions/defense/${key}`));
+  alert("승인되었습니다.");
 };
-window.rejectDef = (key) => { if(confirm("거절?")) remove(ref(db, `suggestions/defense/${key}`)); };
+window.rejectDef = (key) => { 
+  if(confirm("거절하시겠습니까?")) remove(ref(db, `suggestions/defense/${key}`)); 
+};
 
 
 /* --- 모달 공통 --- */
@@ -829,6 +899,7 @@ window.openModal = (type) => {
       <select id="mType"><option value="속공 따야 함">⚡ 속공 따야 함</option><option value="내줘도 됨">🛡️ 내줘도 됨</option></select>
       <input id="mRing" placeholder="반지">
       <input id="mPet" placeholder="펫">
+      <input id="mFormation" placeholder="진형">
       <textarea id="mArmor" rows="2" placeholder="장비/특이사항"></textarea>
       <input id="mSkill" placeholder="스킬순서">
     `;
@@ -853,6 +924,7 @@ function submitAttackSug() {
   push(ref(db, `suggestions/attack/${currentDefense}`), {
     name:name, type:document.getElementById("mType").value,
     ring:document.getElementById("mRing").value, pet:document.getElementById("mPet").value,
+    formation:document.getElementById("mFormation").value, 
     armor:document.getElementById("mArmor").value, skill:document.getElementById("mSkill").value,
     suggester:myNick, timestamp:Date.now()
   });
@@ -873,7 +945,6 @@ function submitDefenseSug() {
 
 function renderRanking() {
   const list = document.getElementById("rankingList");
-  // [수정] 전적 없는 경우도 닉네임 기본 표시
   const myStatDiv = document.getElementById("myStats");
   if(myStatDiv) myStatDiv.textContent = `내 전적: ${myNick} / 0승 0패 (0%)`;
 
@@ -937,10 +1008,10 @@ function renderRanking() {
 }
 
 window.issueKey = async () => {
-  const n = document.getElementById("newUserNick").value.trim();
+  const n = document.getElementById("newUserNick").value;
   if(!n) return;
   const c = Math.floor(100000+Math.random()*900000);
-  await set(ref(db, `allowedUsers/${n}`), { code:c.toString(), createdAt:Date.now() });
+  await set(ref(db, `allowedUsers/${n}`), { code:c, createdAt:Date.now() });
   document.getElementById("newUserNick").value="";
 };
 
@@ -985,13 +1056,11 @@ function renderAdminUserList() {
   const listDiv = document.getElementById("adminUserList"); listDiv.innerHTML = "";
   const stat = {};
   
-  // 전체 로그에서 유저 집계
   Object.values(allLogsCache).forEach(v=>{
     if(!stat[v.nick]) stat[v.nick] = {w:0, l:0};
     if(v.result === "win") stat[v.nick].w++; else stat[v.nick].l++;
   });
   
-  // 키 발급된 유저도 목록에 포함 (전적 없어도 뜨게)
   get(ref(db, "allowedUsers")).then(snap => {
     const users = snap.val() || {};
     Object.keys(users).forEach(u => {
