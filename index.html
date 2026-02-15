@@ -297,6 +297,8 @@
         <input type="text" id="newUserNick" placeholder="닉네임">
         <button onclick="issueKey()" style="background:#2E7D32; color:#fff; width:60px;">발급</button>
       </div>
+      <input type="text" id="keySearchInput" placeholder="🔍 발급된 키 검색..." oninput="filterKeys()" style="margin-bottom:5px; background:#151828; border:1px solid #444; padding:8px; width:100%; box-sizing:border-box;">
+      
       <div id="userKeyList" style="max-height:150px; overflow-y:auto; margin-bottom:15px;"></div>
       
       <div style="color:#B3E5FC; margin-bottom:5px; border-top:1px solid #333; padding-top:15px;">👥 유저 승패 수정</div>
@@ -818,7 +820,6 @@ function showRecDefDetail(key, val) {
   document.getElementById("rdHeroes").textContent = val.heroes || "-";
   document.getElementById("rdFormation").textContent = val.formation || "-";
   document.getElementById("rdPet").textContent = val.pet || "-";
-  // [추가] 스킬 표시
   document.getElementById("rdSkill").textContent = val.skill || "-";
   document.getElementById("rdDesc").innerHTML = (val.desc || "-").replace(/\n/g,"<br>");
 
@@ -826,7 +827,6 @@ function showRecDefDetail(key, val) {
   document.getElementById("rdInputHeroes").value = val.heroes;
   document.getElementById("rdInputFormation").value = val.formation;
   document.getElementById("rdInputPet").value = val.pet;
-  // [추가] 관리자 인풋값
   document.getElementById("rdInputSkill").value = val.skill || "";
   document.getElementById("rdInputDesc").value = val.desc;
 }
@@ -838,7 +838,6 @@ window.addRecDefense = () => {
     heroes: document.getElementById("rdInputHeroes").value,
     formation: document.getElementById("rdInputFormation").value,
     pet: document.getElementById("rdInputPet").value,
-    // [추가] 스킬 저장
     skill: document.getElementById("rdInputSkill").value,
     desc: document.getElementById("rdInputDesc").value,
     maker: "관리자"
@@ -851,7 +850,6 @@ window.editRecDefense = () => {
     heroes: document.getElementById("rdInputHeroes").value,
     formation: document.getElementById("rdInputFormation").value,
     pet: document.getElementById("rdInputPet").value,
-    // [추가] 스킬 수정
     skill: document.getElementById("rdInputSkill").value,
     desc: document.getElementById("rdInputDesc").value
   });
@@ -951,7 +949,6 @@ function submitDefenseSug() {
   push(ref(db, `suggestions/defense`), {
     name:name, heroes:document.getElementById("mHeroes").value,
     formation:document.getElementById("mForm").value, pet:document.getElementById("mPet").value,
-    // [추가] 스킬 저장
     skill: document.getElementById("mSkillDef").value,
     desc:document.getElementById("mDesc").value,
     suggester:myNick, timestamp:Date.now()
@@ -1024,11 +1021,24 @@ function renderRanking() {
 }
 
 window.issueKey = async () => {
-  const n = document.getElementById("newUserNick").value;
+  const n = document.getElementById("newUserNick").value.trim();
   if(!n) return;
   const c = Math.floor(100000+Math.random()*900000);
-  await set(ref(db, `allowedUsers/${n}`), { code:c, createdAt:Date.now() });
+  await set(ref(db, `allowedUsers/${n}`), { code:c.toString(), createdAt:Date.now() });
   document.getElementById("newUserNick").value="";
+};
+
+// [추가] 키 검색 기능
+window.filterKeys = () => {
+  const filter = document.getElementById("keySearchInput").value.toLowerCase();
+  const list = document.getElementById("userKeyList");
+  const rows = list.getElementsByClassName("user-stat-row");
+  
+  for (let row of rows) {
+    const nick = row.querySelector("b").textContent.toLowerCase();
+    // 닉네임이 검색어를 포함하면 flex, 아니면 숨김
+    row.style.display = nick.includes(filter) ? "flex" : "none";
+  }
 };
 
 function renderUserKeys() {
@@ -1045,6 +1055,9 @@ function renderUserKeys() {
       `;
       div.appendChild(r);
     });
+    // 리스트 갱신 후에도 검색 필터 유지
+    const currentFilter = document.getElementById("keySearchInput").value;
+    if(currentFilter) filterKeys();
   });
 }
 window.deleteUser = async (n) => {
