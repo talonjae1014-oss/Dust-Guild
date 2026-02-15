@@ -13,7 +13,7 @@
     --text-sub: #D1D1D1;
     --accent: #B3E5FC; 
     --accent-glow: rgba(179, 229, 252, 0.4);
-    --card-bg: rgba(20, 30, 50, 0.5); 
+    --card-bg: rgba(20, 30, 50, 0.6); 
     --card-border: rgba(255, 255, 255, 0.1);
     --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     --radius: 16px;
@@ -328,6 +328,7 @@
       <div class="info-item full"><span class="info-label">반지 추천</span><span id="rdHeroes">-</span></div>
       <div class="info-item"><span class="info-label">진형</span><span id="rdFormation">-</span></div>
       <div class="info-item"><span class="info-label">펫</span><span id="rdPet">-</span></div>
+      <div class="info-item full"><span class="info-label">스킬순서</span><span id="rdSkill">-</span></div>
       <div class="info-item full"><span class="info-label">설명 및 팁</span><span id="rdDesc">-</span></div>
     </div>
   </div>
@@ -344,6 +345,7 @@
       <input type="text" id="rdInputHeroes" placeholder="반지 추천">
       <input type="text" id="rdInputFormation" placeholder="진형">
       <input type="text" id="rdInputPet" placeholder="펫">
+      <input type="text" id="rdInputSkill" placeholder="스킬순서">
       <textarea id="rdInputDesc" rows="2" placeholder="설명"></textarea>
       <div style="margin-top:5px;">
         <button onclick="addRecDefense()" class="bg-blue">추가</button>
@@ -745,6 +747,7 @@ window.openAdminReview = async (type, k1, k2) => {
       <p><b>반지 추천:</b> ${data.heroes}</p>
       <p><b>진형:</b> ${data.formation}</p>
       <p><b>펫:</b> ${data.pet}</p>
+      <p><b>스킬:</b> ${data.skill || '-'}</p>
       <p><b>설명:</b> ${data.desc}</p>
     `;
     document.getElementById("btnReviewApprove").onclick = () => { approveDef(k1); closeAdminReviewModal(); };
@@ -815,12 +818,16 @@ function showRecDefDetail(key, val) {
   document.getElementById("rdHeroes").textContent = val.heroes || "-";
   document.getElementById("rdFormation").textContent = val.formation || "-";
   document.getElementById("rdPet").textContent = val.pet || "-";
+  // [추가] 스킬 표시
+  document.getElementById("rdSkill").textContent = val.skill || "-";
   document.getElementById("rdDesc").innerHTML = (val.desc || "-").replace(/\n/g,"<br>");
 
   document.getElementById("rdInputName").value = val.name;
   document.getElementById("rdInputHeroes").value = val.heroes;
   document.getElementById("rdInputFormation").value = val.formation;
   document.getElementById("rdInputPet").value = val.pet;
+  // [추가] 관리자 인풋값
+  document.getElementById("rdInputSkill").value = val.skill || "";
   document.getElementById("rdInputDesc").value = val.desc;
 }
 
@@ -831,6 +838,8 @@ window.addRecDefense = () => {
     heroes: document.getElementById("rdInputHeroes").value,
     formation: document.getElementById("rdInputFormation").value,
     pet: document.getElementById("rdInputPet").value,
+    // [추가] 스킬 저장
+    skill: document.getElementById("rdInputSkill").value,
     desc: document.getElementById("rdInputDesc").value,
     maker: "관리자"
   });
@@ -842,6 +851,8 @@ window.editRecDefense = () => {
     heroes: document.getElementById("rdInputHeroes").value,
     formation: document.getElementById("rdInputFormation").value,
     pet: document.getElementById("rdInputPet").value,
+    // [추가] 스킬 수정
+    skill: document.getElementById("rdInputSkill").value,
     desc: document.getElementById("rdInputDesc").value
   });
   alert("수정됨");
@@ -874,7 +885,8 @@ window.approveDef = async (key) => {
   const d = snap.val();
   if(!d) return;
   await push(ref(db, "recommendedDefenses"), {
-    name:d.name, heroes:d.heroes, formation:d.formation, pet:d.pet, desc:d.desc, maker:d.suggester
+    name:d.name, heroes:d.heroes, formation:d.formation, pet:d.pet, 
+    skill:d.skill||"", desc:d.desc, maker:d.suggester
   });
   await remove(ref(db, `suggestions/defense/${key}`));
   alert("승인되었습니다.");
@@ -906,11 +918,13 @@ window.openModal = (type) => {
     document.getElementById("modalSubmitBtn").onclick = submitAttackSug;
   } else {
     document.getElementById("modalTitle").textContent = "방어덱 제보";
+    // [추가] 스킬 순서 입력창
     body.innerHTML = `
       <input id="mDefName" placeholder="방어팀 이름 (필수)">
       <input id="mHeroes" placeholder="반지 추천">
       <input id="mForm" placeholder="진형">
       <input id="mPet" placeholder="펫">
+      <input id="mSkillDef" placeholder="스킬순서">
       <textarea id="mDesc" rows="3" placeholder="설명 및 팁"></textarea>
     `;
     document.getElementById("modalSubmitBtn").onclick = submitDefenseSug;
@@ -937,6 +951,8 @@ function submitDefenseSug() {
   push(ref(db, `suggestions/defense`), {
     name:name, heroes:document.getElementById("mHeroes").value,
     formation:document.getElementById("mForm").value, pet:document.getElementById("mPet").value,
+    // [추가] 스킬 저장
+    skill: document.getElementById("mSkillDef").value,
     desc:document.getElementById("mDesc").value,
     suggester:myNick, timestamp:Date.now()
   });
